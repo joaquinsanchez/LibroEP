@@ -1,0 +1,113 @@
+---
+title: "Modelo de Vectores Autorregresivos"
+output: html_document
+---
+
+### CARGA Y PREPARACION DE DATOS
+
+```{r}
+
+if (!require("curl")) {
+   install.packages("curl", repos="http://cran.rstudio.com/") 
+   library("curl")
+}
+ 
+data <- read.csv(curl("https://raw.githubusercontent.com/joaquinsanchez/LibroEP/master/Cap_7/pinkham-var.csv"), sep = ",")
+
+if (!require("dplyr")) {
+   install.packages("dplyr", repos="http://cran.rstudio.com/") 
+   library("dplyr")
+}
+
+data <- select(data, -X)
+
+data.ts <- ts(data, start=1907, frequency = 1, class="mts")
+
+```
+
+### ANALISIS DE ESTACIONARIEDAD
+
+```{r}
+
+if (!require("urca")) {
+   install.packages("urca", repos="http://cran.rstudio.com/") 
+   library("urca")
+}
+
+adf.ven1 <- summary(ur.df(data.ts[,"Ventas"], type = "drift", selectlags = "BIC"))
+adf.ven1
+adf.pub1 <- summary(ur.df(data.ts[, "Publicidad"], type = "drift", selectlags = "BIC"))
+adf.pub1
+
+adf.ven2 <- summary(ur.df(diff(data.ts[, "Ventas"]), type = "drift", selectlags = "BIC"))
+adf.ven2
+adf.pub2 <- summary(ur.df(diff(data.ts[, "Publicidad"]), type = "drift", selectlags = "BIC"))
+adf.pub2
+
+# Especificacion VAR para seleccionar el numero de retardos (k)
+
+if (!require("vars")) {
+   install.packages("vars", repos="http://cran.rstudio.com/") 
+   library("vars")
+}
+
+var.lags <- VARselect(data.ts, type="const", lag.max=10) 
+var.lags
+
+# Test de cointegracion Johansen
+
+coint <- ca.jo(data.ts, type = "trace", ecdet = "trend", K=3, spec = "longrun")
+coint
+summary(coint)
+
+```
+
+### ESPECIFICACION VEC (MODELO DE CORRECCION DE ERRORES)
+
+```{r}
+
+# Modelo VEC, ya que las series están cointegradas
+
+if (!require("tsDyn")) {
+   install.packages("tsDyn", repos="http://cran.rstudio.com/") 
+   library("tsDyn")
+}
+
+m1 <- VECM(data.ts, 3, r = 1, include = "const", beta = NULL, estim = "ML", LRinclude = "const", exogen = NULL)
+summary(m1)
+
+## Ajuste del modelo y analisis de residuos
+
+hist(m1$residuals[,"Publicidad"], breaks=10)
+hist(m1$residuals[,"Ventas"], breaks = 10)
+plot(density(m1$residuals[,"Publicidad"]))
+plot(density(m1$residuals[,"Ventas"]))
+acf(m1$residuals[,"Publicidad"], lag.max = 20)
+acf(m1$residuals[,"Ventas"], lag.max = 20)
+
+## Funciones de impulso
+
+ma.vec <- irf(m1, ortho=T, impulse=c("Publicidad"), response=c("Ventas"), cumulative=F, boot = TRUE, n.ahead = 20, runs = 1000)
+plot(ma.vec)
+
+ma.vec.2 <- irf(m1, ortho=T, impulse=c("Ventas"), response=c("Ventas"), cumulative=F, boot = TRUE, n.ahead = 20, runs = 1000)
+plot(ma.vec.2)
+
+ma.vec.3 <- irf(m1, ortho=T, impulse=c("Ventas"), response=c("Publicidad"), cumulative=F, boot = TRUE, n.ahead = 20, runs = 1000)
+plot(ma.vec.3)
+
+ma.vec.4 <- irf(m1, ortho=T, impulse=c("Publicidad"), response=c("Publicidad"), cumulative=F, boot = TRUE, n.ahead = 20, runs = 1000)
+plot(ma.vec.4)
+
+# Funcion de varianza
+
+plot(fevd(m1, n.ahead = 20), legend=T, ylab="Porcentaje", xlab="Tiempo")
+
+# Test de causalidad de Granger
+
+granger.v <- grangertest(Ventas ~ Publicidad, order=2, data = data)
+granger.p <- grangertest(Publicidad ~ Ventas, order=2, data = data)
+granger.v
+granger.p 
+
+```

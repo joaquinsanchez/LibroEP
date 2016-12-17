@@ -1,0 +1,105 @@
+---
+title: "Modelo de Redes Neuronales"
+output: html_document
+---
+
+### CARGA DE ARCHIVOS DE DATOS
+
+```{r}
+
+if (!require("curl")) {
+   install.packages("curl", repos="http://cran.rstudio.com/") 
+   library("curl")
+}
+ 
+data <- read.csv(curl("https://raw.githubusercontent.com/joaquinsanchez/LibroEP/master/Cap_7/pinkham.csv"), sep = ",")
+
+pesos <- as.vector(read.csv(curl("https://raw.githubusercontent.com/joaquinsanchez/LibroEP/master/Cap_7/pesos.csv"), sep = ",", header = FALSE, dec = ".", fill = FALSE))
+
+```
+
+### PLANTEAMIENTO DEL MODELO
+
+```{r}
+
+if (!require("nnet")) {
+   install.packages("nnet", repos="http://cran.rstudio.com/") 
+   library("nnet")
+}
+
+mod1 <- nnet(Ventas ~ Publicidad + Ingresos + D1 + D2 + D3 + DU + T, data = data, size = 4, decay = 0.1, maxit = 10000, linout = T, Wts = pesos)
+summary(mod1)
+
+```
+
+### GRAFICOS
+
+```{r}
+
+if (!require("NeuralNetTools")) {
+   install.packages("NeuralNetTools", repos="http://cran.rstudio.com/") 
+   library("NeuralNetTools")
+}
+
+# Grafico de ajuste y residuos
+
+real <- ts(data$Ventas, start=1908, frequency = 1)
+estim <- ts(mod1$fitted.values, start=1908, frequency = 1)
+
+par(mfrow=c(2,1))
+par(mar=c(0,4,0.5,4), oma=c(4,1,1,1))
+
+layout(matrix(c(1,1,2,2), 2, 2, byrow = TRUE), widths=c(3,1), heights=c(2,1))
+
+fit <- data.frame(estim=mod1$fitted.values, obser=data$Ventas)
+fit <- ts(fit, start=1908, frequency = 1)
+
+plot.ts(fit, plot.type=c("single"), ylab="Ventas", xlab="Tiempo (años)", lty=c(1:2), xaxt="n", cex=2)
+grid(nx = NA, ny=NULL)
+legend("topright", c("Ventas estimadas", "Ventas reales"), border="white", lty=c(1:2), fill=FALSE, bty="n")
+
+plot.ts(ts(mod1$residuals, start=1908, frequency = 1), xlab="Años", ylab="Residuos")
+grid(nx=NA, ny=NULL)
+
+# Funcion de respuesta
+
+lekprofile(mod1, group_vals=seq(1, 1, by=1), xsel="Publicidad", group_show=FALSE)
+
+# Grafico de sensibilidad
+
+garson(mod1)
+rel_imp <- garson(mod1, bar_plot = FALSE)$rel_imp
+
+# Esquema de la red neuronal
+
+cols <- colorRampPalette(c("grey", "white"))(7)[rank(rel_imp)]
+plotnet(mod1, circle_col =list(cols, "white"), bord_col = "grey")
+
+```
+
+### SIMULACIONES
+
+```{r}
+
+# Simulacion con nuevos valores (descenso de un 20% en la inversion publicitaria)
+
+sim.data <- data
+sim.data$Publicidad <- sim.data$Publicidad * 0.8
+
+sim.pub <- predict(mod1, sim.data, type="raw")
+fit.2 <- data.frame(sim=sim.pub, obser=data$Ventas)
+fit.2
+
+par(mfrow=c(2,1))
+par(mar=c(0,4,0.5,4), oma=c(4,1,1,1))
+
+layout(matrix(c(1,1,2,2), 2, 2, byrow = TRUE), widths=c(3,1), heights=c(2,1))
+
+plot.ts(fit.2, plot.type=c("single"), ylab="Ventas", xlab="Tiempo (años)", lty=c(1:2), xaxt="n", cex=2)
+grid(nx = NA, ny=NULL)
+legend("topright", c("Ventas con 20% menos Publicidad", "Ventas reales"), border="white", lty=c(1:2), fill=FALSE, bty="n")
+
+plot.ts(ts(fit.2$obser-fit.2$sim, start=1908, frequency = 1), xlab="Años", ylab="Diferencia en Ventas")
+grid(nx=NA, ny=NULL)
+
+```

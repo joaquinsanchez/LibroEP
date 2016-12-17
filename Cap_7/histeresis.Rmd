@@ -1,0 +1,120 @@
+---
+title: "Modelo de Histeresis (Hanssens y Ouynag, 2001)"
+output: html_document
+---
+
+### CARGA Y PREPARACION DE DATOS
+
+```{r}
+
+if (!require("curl")) {
+   install.packages("curl", repos="http://cran.rstudio.com/") 
+   library("curl")
+}
+ 
+data <- read.csv(curl("https://raw.githubusercontent.com/joaquinsanchez/LibroEP/master/Cap_7/auto_pub.csv"), sep = ";")
+
+# Creacion de variable diferenciada positiva 
+
+data$diff.pub <- NULL
+data$diff.pub[2:55] <- diff(data$pub)
+data$diff.pub[1] <- 0
+data
+
+data$phi <- ifelse(data$diff.pub > 0, 1, 0)
+data$pub.pos <- data$diff.pub * data$phi
+head(data)
+
+```
+
+### ANALISIS DESCRIPTIVO
+
+```{r}
+
+# Grafico de Pub-Ventas
+
+x <- seq(1,55,1) # Eje "x"
+
+par(mar=c(4,5,5,5)+0.5)    
+plot(y=data$v, x=x, col="black", type='l', lwd=1.5, lend=1, lty=1, xlab="t=Meses", ylab="", grid=TRUE)
+grid(nx=NA, ny=NULL, lwd = 0.8)
+
+par(new=TRUE)
+plot(y=data$pub, x=x, col='black', type='h', lwd=1.2, lty=2, axes=FALSE, xlab='', ylab='') 
+grid(nx=NA, ny=NULL, lwd = 0.8)
+
+axis(side=4, labels=FALSE)
+at = axTicks(4)
+mtext(side = 4, text = at, at = at, line = 1) 
+mtext(text='Inversión publicitaria (Miles de dólares)', side=4, line=3)
+mtext(text='Ventas (Miles de Unidades)', side=2, line=3)
+
+# Descriptivos
+
+if (!require("psych")) {
+   install.packages("psych", repos="http://cran.rstudio.com/") 
+   library("psych")
+}
+
+describe(data)
+
+```
+
+### ESTACIONARIEDAD
+
+```{r}
+
+if (!require("urca")) {
+   install.packages("urca", repos="http://cran.rstudio.com/") 
+   library("urca")
+}
+
+data.ts <- ts(data, start=c(2007, 1), freq=12)
+data.ts.w <- window(data.ts, start=c(2007,2), end=c(2011,7))
+
+adf.ven1 <- summary(ur.df(data.ts[, "v"], type = "drift", selectlags = "BIC"))
+adf.ven1
+
+adf.pub1 <- summary(ur.df(data.ts[, "pub"], type = "drift", selectlags = "BIC"))
+adf.pub1
+
+adf.pub2 <- summary(ur.df(data.ts[, "pub.pos"], type = "drift", selectlags = "BIC"))
+adf.pub2
+
+```
+
+### PLANTEAMIENTO DEL MODELO
+
+```{r}
+
+
+data$diff.pub <- NULL
+data$diff.pub[2:55] <- diff(data$pub)
+data$diff.pub[1] <- 0
+data$phi <- ifelse(data$diff.pub > 0, 1, 0)
+data$pub.pos <- data$diff.pub * data$phi
+data
+
+# Recodificar "0" con NA en PUB
+data$pub[data$pub==0] <- NA
+data
+
+data.ts <- ts(data, start=c(2007, 1), freq=12)
+data.ts.w <- window(data.ts, start=c(2007,2), end=c(2011,7))
+
+# Modelo dinámico
+
+if (!require("dynlm")) {
+   install.packages("dynlm", repos="http://cran.rstudio.com/") 
+   library("dynlm")
+}
+
+fit <- dynlm(log(v) ~ L(log(v)) + L(log(pub)) + log(pub.pos+1), na.action="na.omit", data=data.ts.w)
+summary(fit)
+
+# Calculo del coeficiente de persistencia (en porcentaje)
+
+per <- fit$coefficients[4]/(fit$coefficients[3] + fit$coefficients[4])*100
+per
+
+```

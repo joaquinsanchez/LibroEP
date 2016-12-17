@@ -1,0 +1,167 @@
+---
+title: "Modelo de Ajuste Parcial"
+output: html_document
+---
+
+### CARGA DEL ARCHIVO DE DATOS
+
+```{r}
+
+if (!require("curl")) {
+   install.packages("curl", repos="http://cran.rstudio.com/") 
+   library("curl")
+}
+ 
+data <- read.csv(curl("https://raw.githubusercontent.com/joaquinsanchez/LibroEP/master/Cap_7/alimen.csv"), sep = ";")
+
+
+```
+
+### ANALISIS DESCRIPTIVO
+
+```{r}
+
+# Graficos descriptivos
+
+x <- seq(1,104,1) # Eje "x"
+grps <- data$grps
+grps[grps==1] <- 0 
+
+# Grafico Publicidad-Ventas
+
+par(mar=c(4,5,5,5)+0.5)    
+plot(y=grps, x=x, col="gray", type='h', lwd=2, lend=2, xlab="t=Semanas", ylab="", grid=TRUE)
+grid(nx=NA, ny=NULL, lwd = 0.8)
+
+par(new=TRUE)
+plot(y=data$ventas, x=x, col='black', type='l', axes=FALSE, xlab='', ylab='') 
+grid(nx=NA, ny=NULL, lwd = 0.8)
+
+axis(side=4, labels=FALSE)
+at = axTicks(4)
+mtext(side = 4, text = at, at = at, line = 1) 
+mtext(text='GRPs', side=4, line=3)
+mtext(text='Ventas (Unidades Equivalentes)', side=2, line=3)
+
+# Grafico distribución-Ventas
+
+par(mar=c(4,5,5,5)+0.5)    
+plot(y=data$ventas, x=x, col="black", lty=2, type='l', lwd=1.5, lend=2, xlab="t=Semanas", ylab="", grid=TRUE)
+grid(nx=NA, ny=NULL, lwd = 0.8)
+
+par(new=TRUE)
+plot(y=data$distri, x=x, col='black', type='l', axes=FALSE, xlab='', ylab='') 
+grid(nx=NA, ny=NULL, lwd = 0.8)
+
+legend("topleft", legend=c("Distribución ponderada", "Ventas (Unidades Equivalentes"), lty=1:2, border="white", fill=FALSE, bty="n")
+
+axis(side=4, labels=FALSE)
+at = axTicks(4)
+mtext(side = 4, text = at, at = at, line = 1) 
+mtext(text='Distribución Ponderada (%)', side=4, line=3)
+mtext(text='Ventas (Unidades Equivalentes)', side=2, line=3)
+
+# Grafico Precio-Ventas
+
+par(mar=c(4,5,5,5)+0.5)    
+plot(y=data$ventas, x=x, col="black", lty=2, type='l', lwd=1.5, lend=2, xlab="t=Semanas", ylab="", grid=TRUE)
+grid(nx=NA, ny=NULL, lwd = 0.8)
+
+par(new=TRUE)
+plot(y=data$precio, x=x, col='black', type='l', axes=FALSE, xlab='', ylab='') 
+grid(nx=NA, ny=NULL, lwd = 0.8)
+
+legend("topleft", legend=c("Precio", "Ventas (Unidades Equivalentes"), lty=1:2, border="white", fill=FALSE, bty="n")
+
+axis(side=4, labels=FALSE)
+at = axTicks(4)
+mtext(side = 4, text = at, at = at, line = 1) 
+mtext(text='Precio (€ por unidad equivalente)', side=4, line=3)
+mtext(text='Ventas (Unidades Equivalentes)', side=2, line=3)
+
+# Estadísticos descriptivos
+
+if (!require("psych")) {
+   install.packages("psych", repos="http://cran.rstudio.com/") 
+   library("psych")
+}
+
+vars <- subset(data[,1:4])
+describe(vars)
+
+```
+
+### PLANTEAMIENTO DEL MODELO
+
+```{r}
+
+# Creacion de la variable endogena retardada y logaritmos
+
+if (!require("DataCombine")) {
+   install.packages("DataCombine", repos="http://cran.rstudio.com/") 
+   library("DataCombine")
+}
+
+data <- slide(data, Var="ventas", NewVar = "lag.ventas") 
+data$l.lag.ventas <- log(data$lag.ventas)
+data$l.grps <- log(data$grps)
+data$l.precio <- log(data$precio)
+data$l.ventas <- log(data$ventas)
+data$l.distri <- log(data$distri)
+head(data)
+
+# Especificacion del Modelo
+
+options(scipen=999)
+
+m1 <- lm(l.ventas ~ l.lag.ventas + l.grps + l.precio + l.distri + d1 + d2 + d3 ,data=data)
+summary(m1)
+estim <- exp(predict(m1))
+
+m2 <- lm(l.ventas ~ l.lag.ventas + l.grps + l.precio + l.distri ,data=data)
+summary(m2)
+
+fit <- data.frame(estim=estim, obser=data$ventas[2:104])
+fit <- ts(fit, start=1, frequency = 1)
+
+# Graficos de ajuste y residuos
+
+par(mfrow=c(2,1))
+par(mar=c(0,4,0.5,4), oma=c(4,1,1,1))
+
+layout(matrix(c(1,1,2,2), 2, 2, byrow = TRUE), widths=c(3,1), heights=c(2,1))
+
+plot.ts(fit, plot.type=c("single"), lty=1:2, xlab="Semanas", ylab="Ventas", xaxt="n", cex=2)
+grid(nx=NA, ny=NULL)
+legend("topleft", legend=c("Ventas Estimadas", "Ventas Observadas"), lty=1:2, fill="white", border = "white")
+
+plot.ts(m1$residuals, xlab="Semanas", ylab="Residuos")
+grid(nx=NA, ny=NULL)
+
+
+```
+
+### ESCENARIOS SIN SHOCKS
+
+```{r}
+
+if (!require("dynsim")) {
+   install.packages("dynsim", repos="http://cran.rstudio.com/") 
+   library("dynsim")
+}
+
+attach(data)
+esc.1 <- data.frame(l.lag.ventas=mean(l.lag.ventas, na.rm=TRUE), l.grps=6, l.precio=min(l.precio), l.distri=max(l.distri))
+esc.2 <-data.frame(l.lag.ventas=mean(l.lag.ventas, na.rm=TRUE), l.grps=0, l.precio=max(l.precio), l.distri=min(l.distri))
+
+escen <- list(esc.1, esc.2)
+
+sim.1 <- dynsim(obj=m1, ldv="l.lag.ventas", scen=escen, n=10)
+
+dynsimGG(sim.1, alpha=0.1, lsize = 0.8, ylab="Ventas estimadas", xlab="Tiempo", leg.name = "Escenarios", leg.labels = c(" A", " B"))
+
+```
+
+
+
+

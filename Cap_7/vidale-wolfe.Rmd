@@ -1,0 +1,104 @@
+---
+title: "Modelo de Vidale-Wolfe"
+output: html_document
+---
+
+### CARGA Y PREPARACION DE DATOS
+
+```{r}
+
+if (!require("curl")) {
+   install.packages("curl", repos="http://cran.rstudio.com/") 
+   library("curl")
+}
+ 
+pub <- read.csv(curl("https://raw.githubusercontent.com/joaquinsanchez/LibroEP/master/Cap_7/planes.csv"), sep = ",")
+
+plan.1 <- pub$pl1 
+plan.2 <- pub$pl2
+
+``` 
+
+### FUNCION DEL MODELO
+
+```{r}
+
+vid <- function(n, f, z, r, v, l, pu, cu, cgrp) {
+  s <- numeric(n)
+  s[1] <- f
+  x <- z * cgrp 
+  for (i in 2:n) {
+    s[i] <- s[i-1] + ((r*x[i]*(v - s[i-1]))/v) - (l * s[i-1])
+    ben <- s * (pu - cu) - x
+  }
+ data.frame(Publicidad=z, Ventas=s, Beneficios=ben)
+}
+
+```
+
+### EJECUCION DEL MODELO PARA LOS DOS PLANES ALTERNATIVOS
+
+```{r}
+
+# Plan 1
+
+out.plan.1 <- vid(n=52, f=22000, z=plan.1, r=2, v=120000, l=0.3, pu=1.2, cu=0.9, cgrp=300)
+out.plan.1
+
+# Plan 2
+
+out.plan.2 <- vid(n=52, f=22000, z=plan.2, r=2, v=120000, l=0.3, pu=1.2, cu=0.9, cgrp=300)
+out.plan.2
+
+```
+
+### GRAFICOS
+
+```{r}
+
+par(mfrow=c(3,2))
+par(mar=c(2,4,2,4))
+
+plot(out.plan.1$Publicidad, type="s", xlab="t=Semanas", ylab="GRPs", cex.axis=1.3, cex.lab=1.3)
+grid(ny=NULL, nx=NA)
+
+plot(out.plan.2$Publicidad, type="s", xlab="t=Semanas", ylab="GRPs", cex.axis=1.3, cex.lab=1.3)
+grid(ny=NULL, nx=NA)
+
+plot(out.plan.1$Ventas, type="l", xlab="t=Semanas", ylab="Ventas (mil. Euros)", cex.axis=1.3, cex.lab=1.3)
+grid(ny=NULL, nx=NA)
+
+plot(out.plan.2$Ventas, type="l", xlab="t=Semanas", ylab="Ventas (mil. Euros)", cex.axis=1.3, cex.lab=1.3)
+grid(ny=NULL, nx=NA)
+
+plot(out.plan.1$Beneficios, type="l", xlab="t=Semanas", ylab="Beneficios (mil. Euros)", cex.axis=1.3, cex.lab=1.3)
+grid(ny=NULL, nx=NA)
+abline(h=0)
+
+plot(out.plan.2$Beneficios, type="l", xlab="t=Semanas", ylab="Beneficios (mil. Euros)", cex.axis=1.3, cex.lab=1.3)
+grid(ny=NULL, nx=NA)
+abline(h=0)
+
+```
+
+### RESUMEN NUMERICO
+
+```{r}
+
+sum.pub.1 <- sum(out.plan.1$Publicidad)
+sum.pub.2 <- sum(out.plan.2$Publicidad)
+  
+sum.ven.1 <- sum(out.plan.1$Ventas)
+sum.ven.2 <- sum(out.plan.2$Ventas)
+  
+sum.ben.1 <- sum(out.plan.1$Beneficios)
+sum.ben.2 <- sum(out.plan.2$Beneficios)
+  
+result <- data.frame(sum.pub.1, sum.pub.2, sum.ven.1, sum.ven.2, sum.ben.1, sum.ben.2)
+
+result
+
+```
+
+
+
