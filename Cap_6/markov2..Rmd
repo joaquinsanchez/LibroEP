@@ -1,0 +1,101 @@
+---
+title: "Modelos de Transicion de Markov"
+output: html_document
+---
+
+### == AVISO: Debido al proceso de estimacion de los modelos de Markov, el codigo puede tardar en ejecutarse == 
+
+### CARGA Y PREPARACION DE DATOS
+
+```{r}
+
+if (!require("curl")) {
+   install.packages("curl", repos="http://cran.rstudio.com/") 
+   library("curl")
+}
+ 
+mark <- read.csv(curl("https://raw.githubusercontent.com/joaquinsanchez/LibroEP/master/Cap_6/markov2.csv"), sep = ",")
+
+# Matriz de transiciones
+
+if (!require("msm")) {
+   install.packages("msm", repos="http://cran.rstudio.com/") 
+   library("msm")
+}
+
+statetable <- statetable.msm(marca, id, data = mark)
+rownames(statetable)<-colnames(statetable)<-c("A","B","C","D","E","F","G")
+statetable
+
+# Matriz de transciones permitidas
+
+twoway4.q <- rbind(c(0, 1, 1, 1, 1, 1, 1), c(1, 0, 1, 1, 1, 1, 1), c(1, 1, 0, 1, 1, 1, 1), c(1, 1, 1, 0, 1, 1, 1), c(1, 1, 1, 1, 0, 1, 1), c(1, 1, 1, 1, 1, 0, 1), c(1, 1, 1, 1, 1, 1, 0))
+rownames(twoway4.q) <- colnames(twoway4.q) <- c("A","B","C","D","E","F","G")
+twoway4.q
+
+```
+
+### ESTIMACION DEL MODELO BASE SIN COVARIABLES
+
+```{r}
+
+# Especificacion del Modelo
+
+mark.msm <- msm(marca ~ t, subject = id, data = mark, qmatrix = twoway4.q, exacttimes=TRUE, gen.inits=TRUE)
+mark.msm
+
+# Grafico de transiciones (t=30)
+
+pstate_1 <- pmatrix.msm(mark.msm, t=30)
+as.matrix(pstate_1)
+
+if (!require("markovchain")) {
+   install.packages("markovchain", repos="http://cran.rstudio.com/") 
+   library("markovchain")
+}
+
+if (!require("diagram")) {
+   install.packages("diagram", repos="http://cran.rstudio.com/") 
+   library("diagram")
+}
+
+a <- pstate_1[,"A"]
+b <- pstate_1[,"B"]
+c <- pstate_1[,"C"]
+d <- pstate_1[,"D"]
+e <- pstate_1[,"E"]
+f <- pstate_1[,"F"]
+g <- pstate_1[,"G"]
+
+matrix <- matrix(c(a,b,c,d,e,f,g), nrow = 7, ncol=7)
+matrix
+
+pstate_1.m <- new("markovchain", transitionMatrix = matrix, states=c("A","B","C","D","E","F","G"), name="Cadena de Markov")
+
+plot(pstate_1.m)
+
+# Tiempo medio de estancia en cada estado
+
+mark.time <- sojourn.msm(mark.msm)
+mark.time
+
+barplot(mark.time$estimates, names.arg = c("A", "B", "C", "D", "E", "F", "G"), horiz = TRUE, col = "lightgrey", border = NA, xlab = "Tiempo de permamencia medio (en días)", ylab = "Marcas", xlim = c(0,365))
+
+```
+
+### ESTIMACION DEL MODELO CON COVARIABLES (PUBLICIDAD)
+
+```{r}
+
+# Matriz de transiciones permitidas
+
+mat.tran <- rbind(c(0, 1, 1, 1, 1, 1, 1), c(1, 0, 1, 1, 1, 1, 1), c(1, 1, 0, 1, 1, 1, 1), c(1, 1, 1, 0, 1, 1, 1), c(1, 1, 1, 1, 0, 1, 1), c(1, 1, 1, 1, 1, 0, 1), c(1, 1, 1, 1, 1, 1, 0))
+rownames(mat.tran)<-colnames(mat.tran)<-c("A","B","C","D","E","F","G")
+
+mark.pub <- msm(marca ~ t, subject = id, data = mark, qmatrix = mat.tran, exacttimes=TRUE, gen.inits=TRUE, covariates = ~ A + B + C + D + E + F + G)
+
+options(scipen = 3)
+hazard.msm(mark.pub)
+
+```
+
