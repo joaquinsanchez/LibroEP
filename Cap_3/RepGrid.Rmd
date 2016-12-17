@@ -1,0 +1,42 @@
+---
+title: "Repertory Grid"
+output: html_document
+---
+
+```{r}
+
+## CARGA DEL ARCHIVO DE DATOS
+
+if (!require("OpenRepGrid")) {
+  install.packages("OpenRepGrid", repos="http://cran.rstudio.com/") 
+  library("OpenRepGrid")
+}
+
+coches <- importTxt() # Este comando abre una ventana del explorador de archivos, en la que se debe seleccionar el archivo "coches.txt". En archivo se encontrara en la ubicacion en la que se haya descargado previamente ("Mis Documentos", o cualquier otra carpeta).
+
+coches
+
+# GRAFICOS
+
+biplot2d(coches, mai=c(1.2,1,1.2,1), e.point.cex=0.4, rect.margins = c(0.4,0.4))
+biplotPseudo3d(coches)
+biplotSimple(coches)
+
+bertinCluster(coches, type="rectangle", xsegs=c(0, .2, .5, .7, 1), ysegs=c(0, .3, .8, 1))
+
+# CORRELACIONES
+constructCor(coches)
+constructRmsCor(coches)
+elementCor(coches)
+elementRmsCor(coches)
+
+# DISTANCIAS
+distance(coches)
+
+# CONFLICTOS Y DILEMAS
+indexIntensity(coches) # baja intensidad = constructo o elemento periferico (sin importancia)
+indexConflict3(coches) # indicadores de conflicto = triadas con correlaciones ilogicas.
+indexDilemma(coches, self=1, ideal=13, diff.con=1, diff.disc=4) # diff.con y diff.disc dependen de la escala.
+
+
+```

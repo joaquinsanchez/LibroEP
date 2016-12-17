@@ -1,0 +1,379 @@
+emoc_a;emoc_b;distancia
+Absorbed ;Angry ;3.0
+Absorbed ;Annoyed ;2.0
+Absorbed ;Anticipatory ;8.5
+Absorbed ;Aware ;14.5
+Absorbed ;Crying;2.0
+Absorbed ;Disappointed ;2.0
+Absorbed ;Energetic ;15.5
+Absorbed ;Enjoymg ;19.5
+Absorbed ;Enthusiastic ;19.5
+Absorbed ;Excited ;9.5
+Absorbed ;Exhilarated ;9.5
+Absorbed ;Fearful ;5.0
+Absorbed ;Frustrated ;5.5
+Absorbed ;Grief-stricken;7.5
+Absorbed ;Happy;8.5
+Absorbed ;Horrified;4.0
+Absorbed ;In Pain;7.5
+Absorbed ;Interested;53.5
+Absorbed ;Joyful;3.0
+Absorbed ;Peaceful;6.0
+Absorbed ;Pleased;5.0
+Absorbed ;Proud;1.5
+Absorbed ;Relaxed;8.0
+Absorbed ;Relieved;0.5
+Absorbed ;Sad ;3.5
+Absorbed ;Satisfied ;9.5
+Absorbed ;Surprised;3.5
+Angry ;Annoyed ;47.0
+Angry ;Anticipatory ;1.5
+Angry ;Aware ;2.0
+Angry ;Crying;19.0
+Angry ;Disappointed ;22.5
+Angry ;Energetic ;2.0
+Angry ;Enjoymg ;0.0
+Angry ;Enthusiastic ;0.0
+Angry ;Excited ;14.0
+Angry ;Exhilarated ;1.0
+Angry ;Fearful ;6.0
+Angry ;Frustrated ;44.0
+Angry ;Grief-stricken;8.5
+Angry ;Happy;0.0
+Angry ;Horrified;7.5
+Angry ;In Pain;18.5
+Angry ;Interested;0.5
+Angry ;Joyful;0.0
+Angry ;Peaceful;0.0
+Angry ;Pleased;0.0
+Angry ;Proud;0.0
+Angry ;Relaxed;0.0
+Angry ;Relieved;0.0
+Angry ;Sad ;11.0
+Angry ;Satisfied ;0.0
+Angry ;Surprised;3.5
+Annoyed ;Anticipatory ;2.5
+Annoyed ;Aware ;3.5
+Annoyed ;Crying;5.0
+Annoyed ;Disappointed ;36.5
+Annoyed ;Energetic ;0.0
+Annoyed ;Enjoymg ;0.0
+Annoyed ;Enthusiastic ;0.0
+Annoyed ;Excited ;2.5
+Annoyed ;Exhilarated ;0.0
+Annoyed ;Fearful ;7.0
+Annoyed ;Frustrated ;49.5
+Annoyed ;Grief-stricken;2.0
+Annoyed ;Happy;0.0
+Annoyed ;Horrified;5.0
+Annoyed ;In Pain;15.5
+Annoyed ;Interested;0.0
+Annoyed ;Joyful;0.0
+Annoyed ;Peaceful;0.0
+Annoyed ;Pleased;0.0
+Annoyed ;Proud;0.0
+Annoyed ;Relaxed;0.0
+Annoyed ;Relieved;0.0
+Annoyed ;Sad ;8.0
+Annoyed ;Satisfied ;0.0
+Annoyed ;Surprised;5.5
+Anticipatory ;Aware ;23.5
+Anticipatory ;Crying;0.0
+Anticipatory ;Disappointed ;0.5
+Anticipatory ;Energetic ;17.5
+Anticipatory ;Enjoymg ;2.5
+Anticipatory ;Enthusiastic ;19.5
+Anticipatory ;Excited ;35.0
+Anticipatory ;Exhilarated ;12.0
+Anticipatory ;Fearful ;19.0
+Anticipatory ;Frustrated ;6.5
+Anticipatory ;Grief-stricken;1.0
+Anticipatory ;Happy;7.5
+Anticipatory ;Horrified;6.0
+Anticipatory ;In Pain;4.0
+Anticipatory ;Interested;25.0
+Anticipatory ;Joyful;3.0
+Anticipatory ;Peaceful;0.0
+Anticipatory ;Pleased;2.5
+Anticipatory ;Proud;1.5
+Anticipatory ;Relaxed;0.0
+Anticipatory ;Relieved;0.5
+Anticipatory ;Sad ;0.5
+Anticipatory ;Satisfied ;0.5
+Anticipatory ;Surprised;7.0
+Aware ;Crying;2.5
+Aware ;Disappointed ;4.5
+Aware ;Energetic ;14.0
+Aware ;Enjoymg ;11.5
+Aware ;Enthusiastic ;10.0
+Aware ;Excited ;13.0
+Aware ;Exhilarated ;9.0
+Aware ;Fearful ;12.0
+Aware ;Frustrated ;5.0
+Aware ;Grief-stricken;3.5
+Aware ;Happy;14.0
+Aware ;Horrified;8.0
+Aware ;In Pain;5.0
+Aware ;Interested;43.5
+Aware ;Joyful;6.5
+Aware ;Peaceful;8.5
+Aware ;Pleased;8.5
+Aware ;Proud;6.0
+Aware ;Relaxed;5.0
+Aware ;Relieved;6.0
+Aware ;Sad ;4.5
+Aware ;Satisfied ;10.0
+Aware ;Surprised;8.5
+Crying;Disappointed ;22.0
+Crying;Energetic ;0.0
+Crying;Enjoymg ;0.5
+Crying;Enthusiastic ;0.0
+Crying;Excited ;1.0
+Crying;Exhilarated ;0.5
+Crying;Fearful ;11.0
+Crying;Frustrated ;19.5
+Crying;Grief-stricken;43.5
+Crying;Happy;7.0
+Crying;Horrified;7.5
+Crying;In Pain;35.0
+Crying;Interested;0.0
+Crying;Joyful;2.0
+Crying;Peaceful;0.5
+Crying;Pleased;0.5
+Crying;Proud;1.0
+Crying;Relaxed;0.5
+Crying;Relieved;3.5
+Crying;Sad ;42.5
+Crying;Satisfied ;0.0
+Crying;Surprised;3.0
+Disappointed ;Energetic ;0.0
+Disappointed ;Enjoymg ;0.0
+Disappointed ;Enthusiastic ;0.0
+Disappointed ;Excited ;2.0
+Disappointed ;Exhilarated ;0.0
+Disappointed ;Fearful ;3.5
+Disappointed ;Frustrated ;42.0
+Disappointed ;Grief-stricken;11.5
+Disappointed ;Happy;0.0
+Disappointed ;Horrified;4.5
+Disappointed ;In Pain;8.5
+Disappointed ;Interested;0.0
+Disappointed ;Joyful;0.0
+Disappointed ;Peaceful;0.0
+Disappointed ;Pleased;0.0
+Disappointed ;Proud;0.0
+Disappointed ;Relaxed;0.0
+Disappointed ;Relieved;1.0
+Disappointed ;Sad ;42.5
+Disappointed ;Satisfied ;0.0
+Disappointed ;Surprised;4.5
+Energetic ;Enjoymg ;23.5
+Energetic ;Enthusiastic ;54.5
+Energetic ;Excited ;43.0
+Energetic ;Exhilarated ;47.0
+Energetic ;Fearful ;1.5
+Energetic ;Frustrated ;1.0
+Energetic ;Grief-stricken;0.5
+Energetic ;Happy;29.0
+Energetic ;Horrified;2.0
+Energetic ;In Pain;0.0
+Energetic ;Interested;25.5
+Energetic ;Joyful;18.0
+Energetic ;Peaceful;0.5
+Energetic ;Pleased;10.0
+Energetic ;Proud;6.5
+Energetic ;Relaxed;2.0
+Energetic ;Relieved;1.5
+Energetic ;Sad ;0.0
+Energetic ;Satisfied ;9.5
+Energetic ;Surprised;5.0
+Enjoymg ;Enthusiastic ;32.0
+Enjoymg ;Excited ;23.5
+Enjoymg ;Exhilarated ;21.5
+Enjoymg ;Fearful ;0.0
+Enjoymg ;Frustrated ;0.0
+Enjoymg ;Grief-stricken;0.0
+Enjoymg ;Happy;50.0
+Enjoymg ;Horrified;0.0
+Enjoymg ;In Pain;0.0
+Enjoymg ;Interested;26.0
+Enjoymg ;Joyful;35.0
+Enjoymg ;Peaceful;23.0
+Enjoymg ;Pleased;35.5
+Enjoymg ;Proud;14.0
+Enjoymg ;Relaxed;27.5
+Enjoymg ;Relieved;5.0
+Enjoymg ;Sad ;0.0
+Enjoymg ;Satisfied ;31.0
+Enjoymg ;Surprised;6.0
+Enthusiastic ;Excited ;47.5
+Enthusiastic ;Exhilarated ;41.5
+Enthusiastic ;Fearful ;0.0
+Enthusiastic ;Frustrated ;0.0
+Enthusiastic ;Grief-stricken;0.0
+Enthusiastic ;Happy;31.5
+Enthusiastic ;Horrified;0.0
+Enthusiastic ;In Pain;0.0
+Enthusiastic ;Interested;33.5
+Enthusiastic ;Joyful;24.0
+Enthusiastic ;Peaceful;2.5
+Enthusiastic ;Pleased;15.0
+Enthusiastic ;Proud;12.5
+Enthusiastic ;Relaxed;2.0
+Enthusiastic ;Relieved;3.0
+Enthusiastic ;Sad ;0.0
+Enthusiastic ;Satisfied ;10.0
+Enthusiastic ;Surprised;6.0
+Excited ;Exhilarated ;43.5
+Excited ;Fearful ;9.5
+Excited ;Frustrated ;3.0
+Excited ;Grief-stricken;1.0
+Excited ;Happy;30.5
+Excited ;Horrified;7.0
+Excited ;In Pain;2.0
+Excited ;Interested;18.5
+Excited ;Joyful;24.0
+Excited ;Peaceful;0.5
+Excited ;Pleased;12.0
+Excited ;Proud;10.5
+Excited ;Relaxed;0.5
+Excited ;Relieved;2.5
+Excited ;Sad ;1.5
+Excited ;Satisfied ;5.0
+Excited ;Surprised;22.5
+Exhilarated ;Fearful ;0.5
+Exhilarated ;Frustrated ;0.5
+Exhilarated ;Grief-stricken;0.0
+Exhilarated ;Happy;29.5
+Exhilarated ;Horrified;1.0
+Exhilarated ;In Pain;0.0
+Exhilarated ;Interested;13.0
+Exhilarated ;Joyful;25.0
+Exhilarated ;Peaceful;2.0
+Exhilarated ;Pleased;12.0
+Exhilarated ;Proud;9.5
+Exhilarated ;Relaxed;2.0
+Exhilarated ;Relieved;3.5
+Exhilarated ;Sad ;0.0
+Exhilarated ;Satisfied ;9.0
+Exhilarated ;Surprised;8.5
+Fearful ;Frustrated ;12.5
+Fearful ;Grief-stricken;11.0
+Fearful ;Happy;0.0
+Fearful ;Horrified;36.5
+Fearful ;In Pain;20.0
+Fearful ;Interested;1.5
+Fearful ;Joyful;0.5
+Fearful ;Peaceful;0.0
+Fearful ;Pleased;0.0
+Fearful ;Proud;0.0
+Fearful ;Relaxed;0.0
+Fearful ;Relieved;0.0
+Fearful ;Sad ;10.5
+Fearful ;Satisfied ;0.0
+Fearful ;Surprised;8.5
+Frustrated ;Grief-stricken;12.5
+Frustrated ;Happy;0.0
+Frustrated ;Horrified;4.5
+Frustrated ;In Pain;18.0
+Frustrated ;Interested;1.5
+Frustrated ;Joyful;0.0
+Frustrated ;Peaceful;0.0
+Frustrated ;Pleased;0.0
+Frustrated ;Proud;0.0
+Frustrated ;Relaxed;0.0
+Frustrated ;Relieved;0.0
+Frustrated ;Sad ;28.0
+Frustrated ;Satisfied ;0.0
+Frustrated ;Surprised;1.0
+Grief-stricken;Happy;0.0
+Grief-stricken;Horrified;9.0
+Grief-stricken;In Pain;21.5
+Grief-stricken;Interested;0.0
+Grief-stricken;Joyful;0.0
+Grief-stricken;Peaceful;0.0
+Grief-stricken;Pleased;0.0
+Grief-stricken;Proud;0.0
+Grief-stricken;Relaxed;0.0
+Grief-stricken;Relieved;0.0
+Grief-stricken;Sad ;40.5
+Grief-stricken;Satisfied ;0.0
+Grief-stricken;Surprised;0.0
+Happy;Horrified;0.0
+Happy;In Pain;0.5
+Happy;Interested;15.5
+Happy;Joyful;52.5
+Happy;Peaceful;32.0
+Happy;Pleased;50.0
+Happy;Proud;32.5
+Happy;Relaxed;27.5
+Happy;Relieved;20.5
+Happy;Sad ;0.0
+Happy;Satisfied ;41.0
+Happy;Surprised;13.0
+Horrified;In Pain;5.5
+Horrified;Interested;1.0
+Horrified;Joyful;0.0
+Horrified;Peaceful;0.0
+Horrified;Pleased;0.0
+Horrified;Proud;0.0
+Horrified;Relaxed;0.0
+Horrified;Relieved;0.0
+Horrified;Sad ;8.0
+Horrified;Satisfied ;0.0
+Horrified;Surprised;12.5
+In Pain;Peaceful;0.0
+In Pain;Pleased;0.0
+In Pain;Proud;0.5
+In Pain;Relaxed;0.5
+In Pain;Relieved;0.0
+In Pain;Sad ;28.0
+In Pain;Satisfied ;0.0
+In Pain;Surprised;1.5
+Interested;In Pain;0.0
+Interested;Joyful;7.5
+Interested;Peaceful;6.0
+Interested;Pleased;13.0
+Interested;Proud;6.5
+Interested;Relaxed;7.5
+Interested;Relieved;3.0
+Interested;Sad ;0.5
+Interested;Satisfied ;12.5
+Interested;Surprised;9.0
+Joyful;In Pain;0.5
+Joyful;Peaceful;14.5
+Joyful;Pleased;31.0
+Joyful;Proud;16.5
+Joyful;Relaxed;9.5
+Joyful;Relieved;7.5
+Joyful;Sad ;0.0
+Joyful;Satisfied ;18.0
+Joyful;Surprised;5.5
+Peaceful;Pleased;31.5
+Peaceful;Proud;5.0
+Peaceful;Relaxed;54.0
+Peaceful;Relieved;19.0
+Peaceful;Sad ;0.5
+Peaceful;Satisfied ;40.5
+Peaceful;Surprised;1.0
+Pleased;Proud;32.5
+Pleased;Relaxed;22.0
+Pleased;Relieved;22.5
+Pleased;Sad ;0.0
+Pleased;Satisfied ;49.0
+Pleased;Surprised;4.5
+Proud;Relaxed;3.5
+Proud;Relieved;3.0
+Proud;Sad ;0.0
+Proud;Satisfied ;28.5
+Proud;Surprised;2.0
+Relaxed;Relieved;26.5
+Relaxed;Sad ;0.5
+Relaxed;Satisfied ;44.0
+Relaxed;Surprised;1.0
+Relieved;Sad ;0.5
+Relieved;Satisfied ;25.0
+Relieved;Surprised;1.5
+Sad ;Satisfied ;0.0
+Sad ;Surprised;0.0
+Satisfied ;Surprised;2.0

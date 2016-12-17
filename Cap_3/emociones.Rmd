@@ -1,0 +1,183 @@
+---
+title: "Emociones (Havlena, 1989)"
+output: html_document
+---
+### == AVISO: La ejecucion del codigo puede tardar, debido al calculo de simulaciones ==
+
+```{r}
+
+## CARGA DE DATOS
+
+if (!require("curl")) {
+  install.packages("curl", repos="http://cran.rstudio.com/") 
+  library("curl")
+}
+
+emociones <- read.csv(curl("https://raw.githubusercontent.com/joaquinsanchez/LibroEP/master/Cap_3/emociones.csv"), sep = ";")
+
+
+## ANALISIS DE DIMENSIONES
+
+if (!require("smacof")) {
+  install.packages("smacof", repos="http://cran.rstudio.com/") 
+  library("smacof")
+}
+
+# Conversion a una matriz de similitud cuadrada simetrica 
+emo_sim <- with(emociones, distancia)
+nams <- with(emociones, unique(c(as.character(emoc_a), as.character(emoc_b))))
+attributes(emo_sim) <- with(emociones, list(Size=length(nams), Labels=nams, Diag=FALSE, Upper=FALSE, method="user"))
+class(emo_sim) <- "dist"
+emo_sim
+
+# Transformacion de similitudes a disimilitudes
+
+emo_dis <- sim2diss(emo_sim, method = 63)
+
+# Configuracion mas proxima a ALSCAL de Havlena
+res_emoc <-smacofSym(delta = emo_dis, type="ordinal", ndim=2)
+res_emoc
+summary(res_emoc)
+
+# Restriccion esferica
+res_emoc_f <-smacofSphere(delta = emo_dis, type="ordinal", ndim=2, verbose=FALSE)
+res_emoc
+
+res_emoc3 <-smacofSym(delta = emo_dis, type="ordinal", ndim=3)
+res_emoc3
+summary(res_emoc3)
+
+# Resultados numericos
+round(res_emoc$dhat, digits=2) #Matriz transformada con dos decimales
+summary(res_emoc)
+
+coord <- as.data.frame(round(res_emoc$conf, digits=2)) # Coordenadas de dos dimensiones
+
+# SIGNIFICACION
+
+# Comprobacion frente a la solucion nula
+set.seed(1234)
+res.perm <- permtest(res_emoc, nrep = 1000, verbose = FALSE)
+res.perm
+
+# GRAFICOS
+
+# Graficos estandar
+
+par(mfrow=c(1,2))
+plot(res_emoc)
+plot(res_emoc_f)
+
+plot(res_emoc, plot.type = "Shepard")
+plot(res_emoc, plot.type = "stressplot")
+
+plot(res_emoc, plot.type = "resplot")
+plot(res_emoc, plot.type = "bubbleplot")
+
+op <- par(mfrow = c(1,2))
+hist(res.perm$stressvec, xlab = "Valores de Stress", main = "Histograma de Permutaciones")
+abline(v = quantile(res.perm$stressvec, c(0.025, 0.975)), col = "gray")
+abline(v = res_emoc$stress, col = "red", lwd = 2)
+plot(res.perm)
+par(op)
+
+if (!require("ggplot2")) {
+  install.packages("ggplot2", repos="http://cran.rstudio.com/")
+  library("ggplot2")
+}
+
+# Etiquetas para las coordenadas
+coord$names <- c("Absorbed", "Angry",	"Annoyed", "Anticipatory",	"Aware",	"Crying", "Disappointed",	"Energetic", "Enjoying", "Enthusiastic", "Excited", "Exhilarated", "Fearful", "Frustrated", "Grief-stricken",	"Happy",	"Horrified",	"In Pain", "Interested",	"Joyful",	"Peaceful",	"Pleased",	"Proud",	"Relaxed",	"Relieved",	"Sad", "Satisfied", "Surprised") 
+ 
+# Scatterplot
+ggplot(coord, aes(x=D1, y=D2)) + geom_point() + geom_text(aes(label=names, hjust=0.5, vjust=1.5)) + coord_cartesian(xlim=c(-1.5,1.5), ylim = c(-1, 1)) + theme(panel.background=element_rect(fill="white"), axis.line=element_line(size=0.7, color="black"),axis.text.x=element_text(colour="black"), axis.text.y=element_text(colour="black"), text=element_text(size=16)) + geom_hline(aes(yintercept=0), linetype="dashed") + geom_vline(aes(xintercept=0), linetype="dashed")
+
+
+## ANALISIS CLUSTER
+
+# Cluster Jerarquico
+hc <- hclust(emo_dis, method="ward.D2")
+plot(hc, hang=-1)
+rect.hclust(hc,2)
+
+# Determinacion del numero de clusters
+if (!require("NbClust")) {
+  install.packages("NbClust", repos="http://cran.rstudio.com/")
+  library("NbClust")
+}
+
+res.fre <- NbClust(diss=emo_dis, distance=NULL, min.nc=2, max.nc=10, method="ward.D2", index="frey")
+res.sil <- NbClust(diss=emo_dis, distance=NULL, min.nc=2, max.nc=10, method="ward.D2", index="silhouette")
+res.mcc <- NbClust(diss=emo_dis, distance=NULL, min.nc=2, max.nc=10, method="ward.D2", index="mcclain")
+res.cin <- NbClust(diss=emo_dis, distance=NULL, min.nc=2, max.nc=10, method="ward.D2", index="cindex")
+res.dun <- NbClust(diss=emo_dis, distance=NULL, min.nc=2, max.nc=10, method="ward.D2", index="dunn")
+
+res.fre
+res.sil
+res.mcc
+res.cin
+res.dun
+
+# Fuzzy Cluster (k=(2 to 11)
+
+if (!require("cluster")) {
+  install.packages("cluster", repos="http://cran.rstudio.com/")
+  library("cluster")
+}
+
+cfuz2 <- fanny(emo_dis, 2, memb.exp=1.5)
+summary(cfuz2)
+plot(cfuz2)
+
+cfuz3 <- fanny(emo_dis, 3, memb.exp=1.5)
+summary(cfuz3)
+plot(cfuz3)
+
+cfuz4 <- fanny(emo_dis, 4, memb.exp=1.5)
+summary(cfuz4)
+plot(cfuz4)
+
+cfuz5 <- fanny(emo_dis, 5, memb.exp=1.5)
+summary(cfuz5)
+plot(cfuz5)
+
+cfuz6 <- fanny(emo_dis, 6, memb.exp=1.5)
+summary(cfuz6)
+plot(cfuz6)
+
+cfuz7 <- fanny(emo_dis, 7, memb.exp=1.5)
+summary(cfuz7)
+plot(cfuz7)
+
+cfuz8 <- fanny(emo_dis, 8, memb.exp=1.5)
+summary(cfuz8)
+plot(cfuz8)
+
+cfuz9 <- fanny(emo_dis, 9, memb.exp=1.5)
+summary(cfuz9)
+plot(cfuz9)
+
+cfuz10 <- fanny(emo_dis, 10, memb.exp=1.5)
+summary(cfuz10)
+plot(cfuz10)
+
+cfuz11 <- fanny(emo_dis, 11, memb.exp=1.5)
+summary(cfuz11)
+plot(cfuz11)
+
+# Grafico de Silhouettes Medias (2-11)
+
+# Crear DataFrame de valores medios
+num_clu <- c(2,3,4,5,6,7,8,9,10,11)
+ave_sil <-c(0.25,0.28,0.27,0.29,0.35,0.352,0.33,0.31,0.26,0.24)
+sil <- data.frame(num_clu, ave_sil) 
+
+# Grafico de dispersion
+ggplot(sil, aes(x=num_clu, y=ave_sil)) +  geom_line(size=1, color="grey") + geom_point(color="black", size=4) + theme(panel.background=element_rect(fill="white"), axis.line=element_line(size=0.7, color="black"),axis.text.x=element_text(colour="black"), axis.text.y=element_text(colour="black"), text=element_text(size=20)) + labs(x="Num. de Clusters", y="Valor Silhouette Medio (S)") + scale_x_continuous(breaks=2:12)
+
+# Resultados
+cfuz7$membership
+cfuz7$clustering
+cfuz7$silinfo
+
+```
