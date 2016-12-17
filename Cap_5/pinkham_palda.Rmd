@@ -1,0 +1,205 @@
+---
+title: "Estimacion de los modelos de Palda (1965)"
+output: html_document
+---
+
+### CARGA Y TRANSFORMACION DE DATOS
+
+```{r}
+
+
+if (!require("curl")) {
+  install.packages("curl", repos="http://cran.rstudio.com/") 
+  library("curl")
+}
+
+pink <- read.csv(curl("https://raw.githubusercontent.com/joaquinsanchez/LibroEP/master/Cap_5/pinkham.csv"), sep = ",")
+
+pink.ts <- ts(pink, start=c(1908, 1), freq=1)
+pink.ts
+
+pub <- ts(pink$Publicidad, start=1908, frequency=1)
+ven <- ts(pink$Ventas, start=1908, frequency=1)
+ing <- ts(pink$Ingresos, start=1908, frequency=1)
+d1  <- ts(pink$D1, start=1908, frequency=1)
+d2  <- ts(pink$D2, start=1908, frequency=1)
+d3  <- ts(pink$D3, start=1908, frequency=1)
+du  <- ts(pink$DU, start=1908, frequency=1)
+t   <- ts(pink$T, start=1908, frequency=1)
+
+## GRAFICOS
+
+if (!require("dplyr")) {
+  install.packages("dplyr", repos="http://cran.rstudio.com/") 
+  library("dplyr")
+}
+
+# Grafico de Ventas-Publicidad
+pinkgr <- select(pink, Ventas, Publicidad)
+pinkgr.ts <- ts(pinkgr, start=1908, frequency = 1)
+
+ts.plot(pinkgr.ts, plot.type="s", lty=c(1,2), ylab="Dólares", xlab="Tiempo", grid=TRUE)
+legend("topright", lty=c(1,2), bty="n", c("Publicidad","Ventas"), text.font=)
+grid(nx=NA, ny=12, lwd = 1)
+
+# Autocorrelación
+acf(pub)
+acf(ven)
+
+``` 
+
+### ESTIMACION DE LOS MODELOS DE PALDA
+
+```{r}
+
+if (!require("dynlm")) {
+  install.packages("dynlm", repos="http://cran.rstudio.com/") 
+  library("dynlm")
+}
+
+# Deshabilitar notacion científica
+options(scipen=3)
+
+## ESTIMACION
+
+# 1. KOYK (Estimacion con OLS: se considera poco rigurosa)
+koyk <- dynlm(ven ~ L(ven, 1) + pub + d1 + d2 + d3)
+summary(koyk)
+plot(koyk)
+
+# 2. KOYL1(Publicidad en logaritmo)
+koyl1 <- dynlm(ven ~ L(ven, 1) + log(pub) + d1 + d2 + d3)
+summary(koyl1)
+plot(koyl1)
+
+# 3. KOYL2 (Inclusion de Tendencia e Ingresos)
+koyl2 <- dynlm(ven ~ L(ven, 1) + log(pub) + du + t + ing)
+summary(koyl2)
+plot(koyl2)
+
+# 4. KOYL3 (sin ingresos)
+koyl3 <- dynlm(ven ~ L(ven, 1) + log(pub) + du + t)
+summary(koyl3)
+plot(koyl3)
+
+## ELASTICIDADES
+
+# 1. Elasticidades de un modelo Koyck lineal
+
+  # Corto Plazo
+  ec.koyk <- koyk$coefficients["pub"] * mean(pub)/mean(ven)
+  # Largo Plazo
+  el.koyk <- ec.koyk/(1-koyk$coefficients["L(ven, 1)"])
+  print(ec.koyk)
+  print(el.koyk)
+  
+# 2. Elasticidades de un modelo Koyck semilog
+
+  # Corto Plazo
+  ec.koyl1 <- (koyl1$coefficients["log(pub)"]) / mean(ven)
+  # Largo Plazo
+  el.koyl1 <- ec.koyl1/(1-koyl1$coefficients["L(ven, 1)"])
+  print(ec.koyl1)
+  print(el.koyl1)
+
+# 4. Elasticidades de un modelo Koyck semilog
+  
+  #Corto Plazo
+  ec.koyl2 <- (koyl2$coefficients["log(pub)"]) / mean(ven)
+  # Largo Plazo
+  el.koyl2 <- ec.koyl2/(1-koyl2$coefficients["L(ven, 1)"])
+  print(ec.koyl2)
+  print(el.koyl2)
+
+# 5. Elasticidades de un modelo Koyck semilog
+  
+  #Corto Plazo
+  ec.koyl3 <- (koyl3$coefficients["log(pub)"]) / mean(ven)
+  # Largo Plazo
+  el.koyl3 <- ec.koyl3/(1-koyl3$coefficients["L(ven, 1)"])
+  print(ec.koyl3)
+  print(el.koyl3)
+
+## CARRYOVER
+  
+  # 1a. KOYK
+  koyk.t <- koyk$coefficients["L(ven, 1)"]/(1-koyk$coefficients["L(ven, 1)"])
+  koyk.t
+  
+  # 2. KOYL1
+  koyl1.t <- koyl1$coefficients["L(ven, 1)"]/(1-koyl1$coefficients["L(ven, 1)"])
+  koyl1.t
+  
+  # 3. KOYL2
+  koyl2.t <- koyl2$coefficients["L(ven, 1)"]/(1-koyl2$coefficients["L(ven, 1)"])
+  koyl2.t
+  
+  # 4. KOYL3
+  koyl3.t <- koyl3$coefficients["L(ven, 1)"]/(1-koyl3$coefficients["L(ven, 1)"])
+  koyl3.t
+  
+```
+
+### SIMULACION DINAMICA
+
+```{r}
+
+if (!require("dynsim")) {
+  install.packages("dynsim", repos="http://cran.rstudio.com/") 
+  library("dynsim")
+}
+
+## SELECCION DE VARIABLES Y ESCENARIOS
+  
+pink.esce <- select(pink, -Ingresos, -DU, -T)
+
+attach(pink.esce)
+
+venlag <- lag(Ventas, 1)
+logpub <- log(Publicidad)
+
+M1 <- lm(Ventas ~ venlag + logpub + D1 + D2 + D3, data = pink.esce)  
+
+# Escenario simulado 1: Publicidad en su valor medio durante todo el periodo
+
+esce.1 <- data.frame(logpub = mean(logpub), D1=0, D2=0, D3=0)
+
+# Escenario simulado 2: Publicidad en su valor maximo durante todo el periodo
+
+esce.2 <- data.frame(logpub = max(logpub), D1=0, D2=0, D3=0)
+
+# Simulación: esce.1 y esce.2 conjuntamente y gráfico
+detach(pink.esce)
+esce <- list(esce.1, esce.2)
+
+sim.1 <- dynsim(obj = M1, ldv= "venlag", scen = esce, n=20)
+dynsimGG(sim.1)
+
+## SIMULACIONES CON SHOCKS (variaciones en el tiempo de una variable)
+
+## creación de la variable Publicidad, con aumentos progresivos.
+pink.esce$pub.sh <- seq(1, 5300, by = 100)
+
+M1 <- lm(Ventas ~ venlag + logpub + D1 + D2 + D3, data = pink.esce, na.action = na.exclude) 
+ventas.sim0 <- predict(M1)  
+
+ventas.sim1 <- M1$coefficients["(Intercept)"] + M1$coefficients["venlag"] * lag(pink.esce$Ventas) + M1$coefficients["logpub"]*log(pink.esce$pub.sh) + M1$coefficients["D1"] * pink.esce$D1 +  M1$coefficients["D2"] * pink.esce$D2 +  M1$coefficients["D3"] * pink.esce$D3  
+
+ventas.sim2 <- M1$coefficients["(Intercept)"] + M1$coefficients["venlag"] * lag(pink.esce$Ventas) + M1$coefficients["logpub"] * log(mean(pink.esce$Publicidad)) + M1$coefficients["D1"] * pink.esce$D1 +  M1$coefficients["D2"] * pink.esce$D2 +  M1$coefficients["D3"] * pink.esce$D3  
+
+ventas.sim3 <- M1$coefficients["(Intercept)"] + M1$coefficients["venlag"] * lag(pink.esce$Ventas) + M1$coefficients["logpub"] * log(min(pink.esce$Publicidad)) + M1$coefficients["D1"] * pink.esce$D1 +  M1$coefficients["D2"] * pink.esce$D2 +  M1$coefficients["D3"] * pink.esce$D3 
+
+ventas.sim4 <- M1$coefficients["(Intercept)"] + M1$coefficients["venlag"] * lag(pink.esce$Ventas) + M1$coefficients["logpub"] * log(max(pink.esce$Publicidad)) + M1$coefficients["D1"] * pink.esce$D1 +  M1$coefficients["D2"] * pink.esce$D2 +  M1$coefficients["D3"] * pink.esce$D3 
+
+simu <- data.frame(ventas.sim2, ventas.sim3, ventas.sim4)
+simu <- simu[-1,]
+
+# Gráficos de simulaciones
+simu.ts <- ts(simu, start=1908, frequency = 1)
+
+ts.plot(simu.ts, plot.type="s", lty=c(1,2,3), ylab="Ventas (miles dól.)", xlab="Tiempo", grid=TRUE)
+legend("topright", lty=c(1,2,3), bty="n", c("Publicidad Media","Publicidad Baja", "Publicidad Alta"), text.font=)
+grid(nx=NA, ny=NULL, lwd = 1)
+
+```
+

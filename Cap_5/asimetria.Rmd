@@ -1,0 +1,188 @@
+---
+title: "Modelos de Asimetria"
+output: html_document
+---
+
+### == AVISO: La ejecucion del codigo puede tardar, debido a la seleccion de los modelos ARIMA ==
+
+### CARGA Y PREPARACION DE DATOS
+
+```{r}
+
+if (!require("curl")) {
+  install.packages("curl", repos="http://cran.rstudio.com/") 
+  library("curl")
+}
+
+auto <- read.csv(curl("https://raw.githubusercontent.com/joaquinsanchez/LibroEP/master/Cap_5/auto.base.csv"), sep = ",")
+
+# Creacion phi y variables dicotomicas segun Wolffram (1971), o Schmitt (2010)
+
+auto$ln.pub <- log(auto$grps + 1)
+auto$diff.ln.pub <- NULL
+auto$diff.ln.pub[2:67] <- diff(auto$ln.pub)
+auto$diff.ln.pub[1] <- 0
+auto$phi <- ifelse(auto$diff.ln.pub > 0, 1, 0)
+auto$pub.pos <- auto$ln.pub[1] + cumsum(auto$diff.ln.pub * auto$phi)
+auto$pub.neg <- auto$ln.pub[1] + cumsum(auto$diff.ln.pub * (1-auto$phi))
+auto
+
+# Transformacion en Series Temporales
+
+pub.pos <- ts(auto$pub.pos, start=2006, frequency=12)
+pub.neg <- ts(auto$pub.neg, start=2006, frequency=12)
+ven <- ts(auto$ventas, start=2006, frequency=12)
+grps <- ts(auto$grps, start=2006, frequency=12)
+d1  <- ts(auto$d1, start=2006, frequency=12)
+d2  <- ts(auto$d2, start=2006, frequency=12)
+d3  <- ts(auto$d3, start=2006, frequency=12)
+d4  <- ts(auto$d4, start=2006, frequency=12)
+d5   <- ts(auto$d5, start=2006, frequency=12)
+
+# Descomposicion de la serie "Ventas"
+
+ven.decom <- decompose(ven)
+plot(ven.decom)
+ven.des <- ven - ven.decom$seasonal
+
+# Grafico de asimetria
+
+ts.plot(pub.pos, pub.neg, plot.type="s", lty=c(1,2), ylab="Publicidad", xlab="Años", grid=TRUE)
+legend("right", lty=c(1,2), bty="n", c("Incrementos","Decrementos"), text.font=)
+grid(nx=NA, ny=NULL, lwd = 1)
+
+```
+
+### MODELO ARIMA ASIMETRICO DE WOLFFRAM
+
+```{r}
+
+# Matriz de variables exogenas
+
+if (!require("DataCombine")) {
+  install.packages("DataCombine", repos="http://cran.rstudio.com/") 
+  library("DataCombine")
+} # Para especificacion de lags 
+
+if (!require("dplyr")) {
+  install.packages("dplyr", repos="http://cran.rstudio.com/") 
+  library("dplyr")
+}
+
+auto <- slide(auto, Var="pub.pos", NewVar = "l.pub.pos") 
+auto <- slide(auto, Var="pub.neg", NewVar = "l.pub.neg") 
+
+head(auto)
+
+x2 <- select(auto, pub.pos, pub.neg, l.pub.pos, l.pub.neg)
+x2 <- data.matrix(x2)
+x2
+
+# Seleccion del modelo Arima con variables exogenas
+
+if (!require("forecast")) {
+  install.packages("forecast", repos="http://cran.rstudio.com/") 
+  library("forecast")
+}
+
+auto.arima(ven, xreg = x2, stepwise = FALSE, approximation = FALSE)
+asim.ar.w <- arima(ven, order = c(4,0,0), xreg = x2)
+asim.ar.w
+
+# Grafico de ajuste
+
+ts.plot(ven, (fitted.Arima(asim.ar.w)), plot.type="s", lty=c(1,2), ylab="Ventas", xlab="Años", grid=TRUE)
+legend("topright", lty=c(1,2), bty="n", c("Ventas Reales","Modelo ARIMA(4,0,0) Ajustado"), text.font=)
+grid(nx=NA, ny=NULL, lwd = 1)
+
+# p-values
+
+if (!require("lmtest")) {
+  install.packages("lmtest", repos="http://cran.rstudio.com/") 
+  library("lmtest")
+}
+
+if (!require("tsoutliers")) {
+  install.packages("tsoutliers", repos="http://cran.rstudio.com/") 
+  library("tsoutliers")
+}
+
+coeftest(asim.ar.w)
+JarqueBera.test(asim.ar.w$residuals)
+
+# Test de wald de igualdad de coeficientes
+
+if (!require("car")) {
+  install.packages("car", repos="http://cran.rstudio.com/") 
+  library("car")
+}
+
+linearHypothesis(asim.ar.w, "l.pub.pos = l.pub.neg", test = "Chisq")
+
+```
+
+### MODELO ARIMA ASIMETRICO DE VOLGELVANG
+
+```{r}
+
+# Creacion phi y variables dicotomicas segun Vogelvang 2005
+
+auto$phi.pos.v <- ifelse(auto$diff.ln.pub > 0, 1, 0)
+auto$phi.neg.v <- ifelse(auto$diff.ln.pub < 0, 1, 0)
+auto$pub.pos.v <- auto$diff.ln.pub * auto$phi.pos.v
+auto$pub.neg.v <- auto$diff.ln.pub * auto$phi.neg.v
+auto
+
+pub.pos.v <- ts(auto$pub.pos.v, start=2006, frequency=12)
+pub.neg.v <- ts(auto$pub.neg.v, start=2006, frequency=12)
+
+ts.plot(pub.pos.v, pub.neg.v, plot.type="s", lty=c(1,2), ylab="Publicidad", xlab="Años", grid=TRUE)
+legend("bottomright", lty=c(1,2), bty="n", c("Incrementos","Decrementos"), text.font=)
+grid(nx=NA, ny=NULL, lwd = 1)
+
+# Matriz de variables exogenas
+
+auto <- slide(auto, Var="pub.pos", NewVar = "l.pub.pos.v", slideBy = -1) 
+auto <- slide(auto, Var="pub.neg", NewVar = "l.pub.neg.v", slideBy = -1) 
+auto <- slide(auto, Var="pub.pos", NewVar = "l2.pub.pos.v", slideBy = -2) 
+auto <- slide(auto, Var="pub.neg", NewVar = "l2.pub.neg.v", slideBy = -2) 
+auto <- slide(auto, Var="pub.pos", NewVar = "l3.pub.pos.v", slideBy = -3) 
+auto <- slide(auto, Var="pub.neg", NewVar = "l3.pub.neg.v", slideBy = -3) 
+
+x.v <- select(auto, d1, d4, d5, pub.pos.v, pub.neg.v, l.pub.pos.v, l.pub.neg.v, l2.pub.pos.v, l3.pub.pos.v)
+x.v <- data.matrix(x.v)
+x.v
+
+# Seleccion del modelo Arima con variables exogenas
+
+auto.arima(ven, xreg = x.v, stepwise = FALSE, approximation = FALSE)
+asim.ar.v <- arima(ven, order = c(0,1,0), xreg = x.v)
+asim.ar.v
+
+# Gráfico de ajuste
+
+ts.plot(ven, (fitted.Arima(asim.ar.v)), plot.type="s", lty=c(1,2), ylab="Ventas", xlab="Años", grid=TRUE)
+legend("topright", lty=c(1,2), bty="n", c("Ventas Reales","Modelo ARIMA (0,1,0) Ajustado"), text.font=)
+grid(nx=NA, ny=NULL, lwd = 1)
+
+# p-values
+
+coeftest(asim.ar.v)
+JarqueBera.test(asim.ar.v$residuals)
+
+# Test de wald
+
+linearHypothesis(asim.ar.v, "l.pub.pos.v = l2.pub.pos.v") 
+linearHypothesis(asim.ar.v, "l.pub.pos.v = l.pub.neg.v") 
+
+```
+
+### DIFERENCIAS ENTRE LOS MODELOS DE WOLFFRAM Y VOGELVANG
+
+```{r}
+
+ts.plot(fitted.Arima(asim.ar.w), (fitted.Arima(asim.ar.v)), plot.type="s", lty=c(1,2), ylab="Ventas", xlab="Años", grid=TRUE)
+legend("topright", lty=c(1,2), bty="n", c("Asimetría Wolffram","Asimetría Vogelvang"), text.font=)
+grid(nx=NA, ny=NULL, lwd = 1)
+
+```
