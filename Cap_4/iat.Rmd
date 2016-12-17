@@ -1,0 +1,74 @@
+---
+title: "Implicit Attitudes Test (Greenwald, 1998; 2003)"
+output: html_document
+---
+
+```{r}
+
+## CARGA DE DATOS
+
+if (!require("curl")) {
+  install.packages("curl", repos="http://cran.rstudio.com/") 
+  library("curl")
+}
+
+iat <- read.csv(curl("https://raw.githubusercontent.com/joaquinsanchez/LibroEP/master/Cap_4/iat.csv"), sep = ",")
+
+## ANALISIS
+
+if (!require("IAT")) {
+  install.packages("IAT", repos="http://cran.rstudio.com/") 
+  library("IAT")
+}
+
+# Analisis cuando los estimulos se presentan en orden congruente 
+c.1 <- iat[iat$cong == 1, ]
+
+D.cong1 <- cleanIAT(my_data = c.1, block_name = "bloque", trial_blocks=c("3","4","6","7"), session_id = "id", trial_latency =  "latencia", trial_error = "error", v_error = 1, v_extreme = 2, v_std = 1)
+
+# Analisis cuando los estimulos no se presentan en orden congruente
+c.0 <- iat[iat$cong == 0, ]
+
+D.cong0 <- cleanIAT(my_data = c.0, block_name = "bloque", trial_blocks = c("3", "4", "6", "7"), session_id = "id", trial_latency = "latencia", trial_error = "error",v_error = 1, v_extreme = 2, v_std = 1)
+
+D <- rbind(D.cong1, D.cong0)
+
+# Analisis descriptivo de la Tabla de Resultados (D)
+if (!require("psych")) {
+  install.packages("psych", repos="http://cran.rstudio.com/") 
+  library("psych")
+}
+
+describe(D)
+
+# Depuracion de la Tabla de Resultados (d-score (IAT), y desviaciones de los bloques combinados "C")
+if (!require("dplyr")) {
+  install.packages("dplyr", repos="http://cran.rstudio.com/") 
+  library("dplyr")
+}
+
+D_res <- select(D, id, IAT, CS1, CS2) # seleccionar variables
+D_res <- rename(D_res, d=IAT) # renombrar IAT
+D_res <- D_res[order(-D_res$d),]
+
+## GRAFICOS
+
+## Variabilidad individual
+plotIndVar(iat, block_name="bloque", trial_blocks = c("3", "4", "6", "7"), session_id="id", trial_latency="latencia", trial_error = "error")
+
+## Proporcion de errores
+plotItemErr(iat, item_name="estim", trial_latency="latencia", trial_error = "error")
+
+## Variabilidad de cada Item
+plotItemVar(iat, block_name="bloque", trial_blocks = c("3", "4", "6", "7"), item_name="estim", trial_latency="latencia", trial_error = "error")
+
+## Grafico D-Score e individuos
+
+if (!require("ggplot2")) {
+  install.packages("ggplot2", repos="http://cran.rstudio.com/") 
+  library("ggplot2")
+}
+
+ggplot(D, aes(id, IAT)) + geom_point(color="red", size=4) + geom_abline(intercept=0, slope=0, linetype=2, color="darkgrey") + geom_abline(intercept=0.15, slope=0, linetype=4, color="black") + geom_abline(intercept=-0.15, slope=0, linetype=4, color="black") + geom_abline(intercept=0.35, slope=0, linetype=4, color="black") + geom_abline(intercept=-0.35, slope=0, linetype=4, color="black") + geom_abline(intercept=0.65, slope=0, linetype=4, color="black") + geom_abline(intercept=-0.65, slope=0, linetype=4, color="black") + theme(panel.background=element_rect(fill="white"), axis.line=element_line(size=0.7, color="black"),axis.text.x=element_text(colour="black"), axis.text.y=element_text(colour="black"), text=element_text(size=16, family="serif")) + xlab("Consumidores") + ylab("Puntuacion D") + geom_text(aes(label=id, hjust=0, vjust=-1, family="serif"), size=4.5, color="black") + geom_rect(data=D[1,], aes(xmin=-Inf, xmax=Inf, ymin=-0.15, ymax=0.15), fill="grey", alpha=0.3, inherit.aes = FALSE) + geom_rect(data=D[1,], aes(xmin=-Inf, xmax=Inf, ymin=-0.35, ymax=-0.15), fill="brown", alpha=0.3, inherit.aes = FALSE) + geom_rect(data=D[1,], aes(xmin=-Inf, xmax=Inf, ymin=0.15, ymax=0.35), fill="brown", alpha=0.3, inherit.aes = FALSE)
+
+```

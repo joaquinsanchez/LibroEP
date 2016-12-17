@@ -1,0 +1,129 @@
+---
+title: "Construccion de escalas (TCT y TRI)"
+output: html_document
+---
+
+### Teoria Clasica de Tests (TCT)
+```{r}
+
+## CARGA DE DATOS
+
+if (!require("curl")) {
+  install.packages("curl", repos="http://cran.rstudio.com/") 
+  library("curl")
+}
+
+amd <- read.csv(curl("https://raw.githubusercontent.com/joaquinsanchez/LibroEP/master/Cap_4/amd.csv"), sep = ";")
+
+## ANALISIS DESCRIPTIVO
+
+if (!require("psych")) {
+  install.packages("psych", repos="http://cran.rstudio.com/") 
+  library("psych")
+}
+
+describe(amd)
+
+## FIABILIDAD
+
+# Correlacion Item-Total 
+if (!require("psychometric")) {
+  install.packages("psychometric", repos="http://cran.rstudio.com/") 
+  library("psychometric")
+}
+
+item.exam(amd)
+
+# Indicadores de fiabilidad
+alpha(amd)
+
+## ANALISIS FACTORIAL EXPLORATORIO
+
+fact.0<-princomp(amd, cor=TRUE)
+summary(fact.0)
+loadings(fact.0)
+plot(fact.0)
+plot(fact.0, type="lines")
+biplot(fact.0)
+
+# Num. de factores
+
+if (!require("nFactors")) {
+  install.packages("nFactors", repos="http://cran.rstudio.com/") 
+  library("nFactors")
+}
+
+ev <- eigen(cor(amd))
+ev
+ap <- parallel(subject=nrow(amd),var=ncol(amd),rep=100,cent=.05)
+ap
+nS <- nScree(x=ev$values, aparallel=ap$eigen$qevpea)
+plotnScree(nS)
+
+# Analisis Factorial Confirmatorio 
+
+if (!require("lavaan")) {
+  install.packages("lavaan", repos="http://cran.rstudio.com/") 
+  library("lavaan")
+}
+
+model.1<-'PL =~ sentir + dispon + mejor + valor + calidad + buena'
+fit<-cfa(model.1, data=amd)
+summary(fit, fit.measures=TRUE)
+inspect(fit, "rsquare") #Average Variance Extracted (AVE)
+
+# Modelo alternativo, excluyendo la variable "buena"
+model.2<-'PL =~ sentir + dispon + mejor + valor + calidad'
+fit.2<-cfa(model.2, data=amd)
+summary(fit.2, fit.measures=TRUE)
+inspect(fit.2, "rsquare") #Average Variance Extracted (AVE)
+
+```
+### Teoria de Respuesta al Item (TRI) 
+
+```{r}
+
+## AJUSTE DE UN MODELO GPCM (Generalized Partial Credit Model)
+
+# Modelo base
+
+if (!require("ltm")) {
+  install.packages("ltm", repos="http://cran.rstudio.com/") 
+  library("ltm")
+}
+
+fit1 <- grm(amd)
+fit1
+summary(fit1)
+
+# Bondad de ajuste
+margins(fit1)
+margins(fit1, type="three")
+
+## GRAFICOS
+
+# Paleta de colores para los graficos
+if (!require("RColorBrewer")) {
+  install.packages("RColorBrewer", repos="http://cran.rstudio.com/") 
+  library("RColorBrewer")
+}
+
+jBrewColors <- brewer.pal(n=6, name="RdGy")
+
+# Grafico OCCu
+par(mfrow = c(3, 2))
+plot(fit1, type = "OCCu", lwd = 2, cex = 1.2, legend = FALSE, main=NULL, cx = "topleft", ylab="Probabilidad", xlab = "Actitud hacia la MD", cex.main = 1.5, cex.lab = 1.3, cex.axis = 1.1, col=jBrewColors)
+
+# Grafico ICC
+par(mfrow = c(3, 2))
+plot(fit1, type = "ICC", lwd = 2, cex = 1.2, legend = FALSE, main=NULL, cx = "topleft", ylab="Probabilidad", xlab = "Actitud hacia la MD", cex.main = 1.5, cex.lab = 1.3, cex.axis = 1.1, col=jBrewColors)
+
+# Grafico IIC
+par(mfrow = c(1, 1))
+plot(fit1, type = "IIC", lwd = 2, cex = 1.2, legend = FALSE, main=NULL, cx = "topleft", ylab="Información", xlab = "Actitud hacia la MD", cex.main = 1.5, cex.lab = 1.3, cex.axis = 1.1, col=jBrewColors)
+
+## PUNTUACIONES DE LA ESCALA
+scores <- factor.scores(fit1)
+scores
+
+```

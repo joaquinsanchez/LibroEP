@@ -1,0 +1,65 @@
+---
+title: "Electromiografia Facial (EMG) - Emotional API - Microsoft"
+output: html_document
+---
+
+```{r}
+
+## CARGA DE PAQUETES
+
+if (!require("httr")) {
+  install.packages("httr", repos="http://cran.rstudio.com/") 
+  library("httr")
+}
+
+if (!require("XML")) {
+  install.packages("XML", repos="http://cran.rstudio.com/") 
+  library("XML")
+}
+
+if (!require("stringr")) {
+  install.packages("stringr", repos="http://cran.rstudio.com/") 
+  library("stringr")
+}
+
+## CARGA DE IMAGEN ("Living.jpg")
+
+img.url = "https://raw.githubusercontent.com/joaquinsanchez/LibroEP/master/Cap_4/living.jpg"
+
+## MICRSOFT API
+URL.emoface = 'https://api.projectoxford.ai/emotion/v1.0/recognize'
+
+## cLAVE DE ACCESO (solicitar la clave personal en la web de Microsoft Emotion API)
+emotionKEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+
+# Definir imagen
+mybody = list(url = img.url)
+
+## ANALISIS
+faceEMO = POST(
+  url = URL.emoface,
+  content_type('application/json'), add_headers(.headers = c('Ocp-Apim-Subscription-Key' = emotionKEY)),
+  body = mybody,
+  encode = 'json'
+)
+
+# Solicitud
+living = content(faceEMO)[[1]]
+resultado <- as.data.frame(as.matrix(living$scores))
+resultado
+
+# Transformar datos
+resultado$V1 <- lapply(strsplit(as.character(resultado$V1), "e"), "[", 1)
+resultado$V1<-as.numeric(resultado$V1)
+colnames(resultado)[1] <- "Level"
+resultado$Emotion <- rownames(resultado)
+
+## GRAFICO
+if (!require("ggplot2")) {
+  install.packages("ggplot2", repos="http://cran.rstudio.com/") 
+  library("ggplot2")
+}
+
+ggplot(data = resultado, aes(x=Emotion, y=Level)) + geom_bar(stat="identity")
+
+```
