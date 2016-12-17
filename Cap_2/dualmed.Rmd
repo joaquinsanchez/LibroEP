@@ -1,0 +1,91 @@
+---
+title: "Actitud hacia el anuncio - Modelo de Mediación Doble"
+output: html_document
+---
+
+```{r}
+## CARGA DEL ARCHIVO DE DATOS
+if (!require("curl")) {
+  install.packages("curl", repos="http://cran.rstudio.com/") 
+  library("curl")
+}
+
+dualmed <- read.csv(curl("https://raw.githubusercontent.com/joaquinsanchez/LibroEP/master/Cap_2/dualmed.csv"), sep = " ")
+
+## ANALISIS DESCRIPTIVO
+if (!require("psych")) {
+  install.packages("psych", repos="http://cran.rstudio.com/") 
+  library("psych")
+}
+
+describe(dualmed)
+
+# Normalidad univariante y multivariante
+if (!require("vcd")) {
+  install.packages("vcd", repos="http://cran.rstudio.com/") 
+  library("vcd")
+}
+
+if (!require("MVN")) {
+  install.packages("MVN", repos="http://cran.rstudio.com/") 
+  library("MVN")
+}
+
+uniPlot(dualmed, type="histogram", family="serif")
+
+mardiaTest(dualmed, cov=TRUE, qqplot=FALSE)
+
+# Correlacion entre las variables observables y Mapa de Calor
+corr <- cor(dualmed, use="pairwise")
+cor.plot(mat.sort(corr), color=TRUE, main="", cex=0.7, numbers=TRUE)
+
+## MODELO DE MEDIDA (FIABIILDAD)
+alpha(dualmed[,1:3])
+alpha(dualmed[,4:6])
+alpha(dualmed[,7:10])
+alpha(dualmed[,11:13])
+alpha(dualmed[,14:16])
+
+## MODELO ESTRUCTURAL
+if (!require("lavaan")) {
+  install.packages("lavaan", repos="http://cran.rstudio.com/") 
+  library("lavaan")
+}
+
+sem.model.dmm = "CA =~ ca1+ca2+ca3; CM =~ cm1+cm2+cm3; AA =~ aa1+aa2+aa3+aa4; AM =~ am1+am2+am3; IC =~ ic1+ic2+ic3; AA ~ CA; AM ~ AA + CM; IC ~ AM; CM ~ AA"
+sem.f.2=sem(sem.model.dmm, data=dualmed)
+summary(sem.f.2)
+
+# Indices de ajuste principales
+fitMeasures(sem.f.2, c("chisq", "df", "pvalue", "rmsea", "rmsea.ci.lower", "rmsea.ci.upper", "srmr", "nnfi", "cfi", "gfi", "agfi"))
+
+# Grafico estructural
+
+if (!require("semPlot")) {
+  install.packages("semPlot", repos="http://cran.rstudio.com/") 
+  library("semPlot")
+}
+
+if (!require("igraph")) {
+  install.packages("igraph", repos="http://cran.rstudio.com/") 
+  library("igraph")
+}
+
+L <- matrix(
+c(
+NA, NA,"ca1",NA, "ca2",NA, "ca3", NA, "cm1",NA, "cm2",NA, "cm3",NA,NA, 
+NA, NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
+NA,NA, NA, NA, "CA", NA,NA, NA,NA, NA,"CM", NA,NA,NA,NA, 
+"aa1", NA, NA, NA, NA, NA, NA, NA, NA,NA,NA,NA,NA,NA,"am1", 
+"aa2", NA, NA, NA, "AA", NA, NA, NA,NA, NA,"AM",NA,NA,NA,"am2",
+"aa3", NA, NA, NA, NA, NA, NA, NA,NA, NA, NA,NA,NA,NA,"am3",
+"aa4", NA, NA, NA, NA, NA, NA, NA,NA, NA,"IC",NA,NA,NA,NA,
+NA,NA, NA, NA, NA, NA, NA, NA, NA,NA, NA, NA, NA,NA,NA,
+NA,NA, NA, NA, NA,NA, NA, NA, "ic1",NA , "ic2", NA, "ic3",NA,NA),
+,9)
+
+par(mfrow=c(1,1))
+
+semPaths(sem.f.2, "model", "est", style="lisrel", layout=L, nCharNodes=0, label.scale=FALSE, label.cex=0.8, edge.width=0.4, residuals=FALSE, fixedStyle=1, freeStyle=1, exoVar=FALSE, sizeMan=3.5, sizeLat=5, edge.label.cex=0.7, font=10)
+
+```

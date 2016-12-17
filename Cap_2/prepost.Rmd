@@ -1,0 +1,94 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
+```{r}
+## PREPARACION DE DATOS
+
+# Carga del archivo de datos
+if (!require("curl")) {
+  install.packages("curl", repos="http://cran.rstudio.com/") 
+  library("curl")
+}
+
+prepost <- read.delim(curl("https://raw.githubusercontent.com/joaquinsanchez/LibroEP/master/Cap_2/prepost.txt"))
+
+# Formato "Largo"
+if (!require("reshape")) {
+  install.packages("reshape", repos="http://cran.rstudio.com/") 
+  library("reshape")
+}
+
+prepost.l <- melt(prepost, id = "id", measured = c("pre","post_1","post_2"))
+head(prepost.l)
+
+# Ordenacion por "id"
+prepost.l <- prepost.l[order(prepost.l$id),]
+head(prepost.l)
+
+# Renombrado de variables
+prepost.l <- rename(prepost.l, c(variable="t",value="actitud_mf"))
+
+# Primeros casos
+head(prepost.l)
+
+## ANALISIS DESCRIPTIVO
+
+# Boxplot
+if (!require("ggplot2")) {
+  install.packages("ggplot2", repos="http://cran.rstudio.com/") 
+  library("ggplot2")
+}
+
+if (!require("ggthemes")) {
+  install.packages("ggthemes", repos="http://cran.rstudio.com/") 
+  library("ggthemes")
+}
+
+ggplot( prepost.l, aes(t, actitud_mf, fill=t)) + geom_boxplot(alpha = 0.6, outlier.colour = c("grey40") , outlier.size=3.5) + scale_fill_manual(values=c("cadetblue", "orange", "orangered3")) + theme_bw() +labs(title="Actitud hacia la Marca de Fabricante \n", x="", y="Actitud \n") +  guides(fill = guide_legend("\n Supplement"))
+
+
+# Descriptivos
+if (!require("psych")) {
+  install.packages("psych", repos="http://cran.rstudio.com/") 
+  library("psych")
+}
+
+describeBy(prepost.l$actitud_mf, prepost.l$t, mat=TRUE)
+
+## ANOVA
+if (!require("ez")) {
+  install.packages("ez", repos="http://cran.rstudio.com/") 
+  library("ez")
+}
+
+anova.model <- ezANOVA(data=prepost.l, dv=.(actitud_mf), wid=.(id), within=.(t), detailed=TRUE, type=3)
+anova.model
+
+# Post-hoc Test
+pairwise.t.test(prepost.l$actitud_mf, prepost.l$t, paired=TRUE, p.adjust.method="bonferroni")
+
+## MODELO LINEAL MIXTO
+
+if (!require("nlme")) {
+  install.packages("nlme", repos="http://cran.rstudio.com/") 
+  library("nlme")
+}
+
+# Contrastes
+pre_vs_post1 <- c(1,-1,0)
+post1_vs_post2 <- c(0,1,-1)
+contrasts(prepost.l$t) <- cbind(pre_vs_post1, post1_vs_post2)
+
+# Modelo Base
+mixed.basemodel <- lme(actitud_mf ~ 1, random=~1|id/t, data=prepost.l, method="ML")
+
+# Modelo Completo
+mixed.model <- lme(actitud_mf ~ t, random=~1|id/t, data=prepost.l, method="ML")
+summary(mixed.model)
+
+# Comparacion del Modelo Base con el Modelo Completo
+anova(mixed.basemodel,mixed.model)
+
+```
