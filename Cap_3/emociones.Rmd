@@ -87,7 +87,7 @@ if (!require("ggplot2")) {
 }
 
 # Etiquetas para las coordenadas
-coord$names <- c("Absorbed", "Angry",	"Annoyed", "Anticipatory",	"Aware",	"Crying", "Disappointed",	"Energetic", "Enjoying", "Enthusiastic", "Excited", "Exhilarated", "Fearful", "Frustrated", "Grief-stricken",	"Happy",	"Horrified",	"In Pain", "Interested",	"Joyful",	"Peaceful",	"Pleased",	"Proud",	"Relaxed",	"Relieved",	"Sad", "Satisfied", "Surprised") 
+coord$names <- c("Absorbed", "Angry",	"Annoyed", "Anticipatory",	"Aware",	"Crying", "Disappointed",	"Energetic", "Enjoying", "Enthusiastic", "Excited", "Exhilarated", "Fearful", "Frustrated", "Grief-stricken",	"Happy",	"Horrified",	"Interested",	"Joyful",	"In Pain", "Peaceful",	"Pleased",	"Proud",	"Relaxed",	"Relieved",	"Sad", "Satisfied", "Surprised")
  
 # Scatterplot
 ggplot(coord, aes(x=D1, y=D2)) + geom_point() + geom_text(aes(label=names, hjust=0.5, vjust=1.5)) + coord_cartesian(xlim=c(-1.5,1.5), ylim = c(-1, 1)) + theme(panel.background=element_rect(fill="white"), axis.line=element_line(size=0.7, color="black"),axis.text.x=element_text(colour="black"), axis.text.y=element_text(colour="black"), text=element_text(size=16)) + geom_hline(aes(yintercept=0), linetype="dashed") + geom_vline(aes(xintercept=0), linetype="dashed")
