@@ -98,7 +98,7 @@ ggplot(coord, aes(x=D1, y=D2)) + geom_point() + geom_text(aes(label=names, hjust
 # Cluster Jerarquico
 hc <- hclust(emo_dis, method="ward.D2")
 plot(hc, hang=-1)
-rect.hclust(hc,2)
+# rect.hclust(hc,2)
 
 # Determinacion del numero de clusters
 if (!require("NbClust")) {
