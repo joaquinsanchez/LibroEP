@@ -1,0 +1,379 @@
+emoc_a;emoc_b;distancia
+Absorbed ;Angry ;3
+Absorbed ;Annoyed ;2
+Absorbed ;Anticipatory ;8.5
+Absorbed ;Aware ;14.5
+Absorbed ;Crying;2
+Absorbed ;Disappointed ;2
+Absorbed ;Energetic ;15.5
+Absorbed ;Enjoymg ;19.5
+Absorbed ;Enthusiastic ;19.5
+Absorbed ;Excited ;9.5
+Absorbed ;Exhilarated ;9.5
+Absorbed ;Fearful ;5
+Absorbed ;Frustrated ;5.5
+Absorbed ;Grief-stricken;7.5
+Absorbed ;Happy;8.5
+Absorbed ;Horrified;4
+Absorbed ;Interested;53.5
+Absorbed ;Joyful;3
+Absorbed ;In Pain;7.5
+Absorbed ;Peaceful;6
+Absorbed ;Pleased;5
+Absorbed ;Proud;1.5
+Absorbed ;Relaxed;8
+Absorbed ;Relieved;0.5
+Absorbed ;Sad ;3.5
+Absorbed ;Satisfied ;9.5
+Absorbed ;Surprised;3.5
+Angry ;Annoyed ;47
+Angry ;Anticipatory ;1.5
+Angry ;Aware ;2
+Angry ;Crying;19
+Angry ;Disappointed ;22.5
+Angry ;Energetic ;2
+Angry ;Enjoymg ;0
+Angry ;Enthusiastic ;0
+Angry ;Excited ;14
+Angry ;Exhilarated ;1
+Angry ;Fearful ;6
+Angry ;Frustrated ;44
+Angry ;Grief-stricken;8.5
+Angry ;Happy;0
+Angry ;Horrified;7.5
+Angry ;Interested;0.5
+Angry ;Joyful;0
+Angry ;In Pain;18.5
+Angry ;Peaceful;0
+Angry ;Pleased;0
+Angry ;Proud;0
+Angry ;Relaxed;0
+Angry ;Relieved;0
+Angry ;Sad ;11
+Angry ;Satisfied ;0
+Angry ;Surprised;3.5
+Annoyed ;Anticipatory ;2.5
+Annoyed ;Aware ;3.5
+Annoyed ;Crying;5
+Annoyed ;Disappointed ;36.5
+Annoyed ;Energetic ;0
+Annoyed ;Enjoymg ;0
+Annoyed ;Enthusiastic ;0
+Annoyed ;Excited ;2.5
+Annoyed ;Exhilarated ;0
+Annoyed ;Fearful ;7
+Annoyed ;Frustrated ;49.5
+Annoyed ;Grief-stricken;2
+Annoyed ;Happy;0
+Annoyed ;Horrified;5
+Annoyed ;Interested;0
+Annoyed ;Joyful;0
+Annoyed ;In Pain;15.5
+Annoyed ;Peaceful;0
+Annoyed ;Pleased;0
+Annoyed ;Proud;0
+Annoyed ;Relaxed;0
+Annoyed ;Relieved;0
+Annoyed ;Sad ;8
+Annoyed ;Satisfied ;0
+Annoyed ;Surprised;5.5
+Anticipatory ;Aware ;23.5
+Anticipatory ;Crying;0
+Anticipatory ;Disappointed ;0.5
+Anticipatory ;Energetic ;17.5
+Anticipatory ;Enjoymg ;2.5
+Anticipatory ;Enthusiastic ;19.5
+Anticipatory ;Excited ;35
+Anticipatory ;Exhilarated ;12
+Anticipatory ;Fearful ;19
+Anticipatory ;Frustrated ;6.5
+Anticipatory ;Grief-stricken;1
+Anticipatory ;Happy;7.5
+Anticipatory ;Horrified;6
+Anticipatory ;Interested;25
+Anticipatory ;Joyful;3
+Anticipatory ;In Pain;4
+Anticipatory ;Peaceful;0
+Anticipatory ;Pleased;2.5
+Anticipatory ;Proud;1.5
+Anticipatory ;Relaxed;0
+Anticipatory ;Relieved;0.5
+Anticipatory ;Sad ;0.5
+Anticipatory ;Satisfied ;0.5
+Anticipatory ;Surprised;7
+Aware ;Crying;2.5
+Aware ;Disappointed ;4.5
+Aware ;Energetic ;14
+Aware ;Enjoymg ;11.5
+Aware ;Enthusiastic ;10
+Aware ;Excited ;13
+Aware ;Exhilarated ;9
+Aware ;Fearful ;12
+Aware ;Frustrated ;5
+Aware ;Grief-stricken;3.5
+Aware ;Happy;14
+Aware ;Horrified;8
+Aware ;Interested;43.5
+Aware ;Joyful;6.5
+Aware ;In Pain;5
+Aware ;Peaceful;8.5
+Aware ;Pleased;8.5
+Aware ;Proud;6
+Aware ;Relaxed;5
+Aware ;Relieved;6
+Aware ;Sad ;4.5
+Aware ;Satisfied ;10
+Aware ;Surprised;8.5
+Crying;Disappointed ;22
+Crying;Energetic ;0
+Crying;Enjoymg ;0.5
+Crying;Enthusiastic ;0
+Crying;Excited ;1
+Crying;Exhilarated ;0.5
+Crying;Fearful ;11
+Crying;Frustrated ;19.5
+Crying;Grief-stricken;43.5
+Crying;Happy;7
+Crying;Horrified;7.5
+Crying;Interested;0
+Crying;Joyful;2
+Crying;In Pain;35
+Crying;Peaceful;0.5
+Crying;Pleased;0.5
+Crying;Proud;1
+Crying;Relaxed;0.5
+Crying;Relieved;3.5
+Crying;Sad ;42.5
+Crying;Satisfied ;0
+Crying;Surprised;3
+Disappointed ;Energetic ;0
+Disappointed ;Enjoymg ;0
+Disappointed ;Enthusiastic ;0
+Disappointed ;Excited ;2
+Disappointed ;Exhilarated ;0
+Disappointed ;Fearful ;3.5
+Disappointed ;Frustrated ;42
+Disappointed ;Grief-stricken;11.5
+Disappointed ;Happy;0
+Disappointed ;Horrified;4.5
+Disappointed ;Interested;0
+Disappointed ;Joyful;0
+Disappointed ;In Pain;8.5
+Disappointed ;Peaceful;0
+Disappointed ;Pleased;0
+Disappointed ;Proud;0
+Disappointed ;Relaxed;0
+Disappointed ;Relieved;1
+Disappointed ;Sad ;42.5
+Disappointed ;Satisfied ;0
+Disappointed ;Surprised;4.5
+Energetic ;Enjoymg ;23.5
+Energetic ;Enthusiastic ;54.5
+Energetic ;Excited ;43
+Energetic ;Exhilarated ;47
+Energetic ;Fearful ;1.5
+Energetic ;Frustrated ;1
+Energetic ;Grief-stricken;0.5
+Energetic ;Happy;29
+Energetic ;Horrified;2
+Energetic ;Interested;25.5
+Energetic ;Joyful;18
+Energetic ;In Pain;0
+Energetic ;Peaceful;0.5
+Energetic ;Pleased;10
+Energetic ;Proud;6.5
+Energetic ;Relaxed;2
+Energetic ;Relieved;1.5
+Energetic ;Sad ;0
+Energetic ;Satisfied ;9.5
+Energetic ;Surprised;5
+Enjoymg ;Enthusiastic ;32
+Enjoymg ;Excited ;23.5
+Enjoymg ;Exhilarated ;21.5
+Enjoymg ;Fearful ;0
+Enjoymg ;Frustrated ;0
+Enjoymg ;Grief-stricken;0
+Enjoymg ;Happy;50
+Enjoymg ;Horrified;0
+Enjoymg ;Interested;26
+Enjoymg ;Joyful;35
+Enjoymg ;In Pain;0
+Enjoymg ;Peaceful;23
+Enjoymg ;Pleased;35.5
+Enjoymg ;Proud;14
+Enjoymg ;Relaxed;27.5
+Enjoymg ;Relieved;5
+Enjoymg ;Sad ;0
+Enjoymg ;Satisfied ;31
+Enjoymg ;Surprised;6
+Enthusiastic ;Excited ;47.5
+Enthusiastic ;Exhilarated ;41.5
+Enthusiastic ;Fearful ;0
+Enthusiastic ;Frustrated ;0
+Enthusiastic ;Grief-stricken;0
+Enthusiastic ;Happy;31.5
+Enthusiastic ;Horrified;0
+Enthusiastic ;Interested;33.5
+Enthusiastic ;Joyful;24
+Enthusiastic ;In Pain;0
+Enthusiastic ;Peaceful;2.5
+Enthusiastic ;Pleased;15
+Enthusiastic ;Proud;12.5
+Enthusiastic ;Relaxed;2
+Enthusiastic ;Relieved;3
+Enthusiastic ;Sad ;0
+Enthusiastic ;Satisfied ;10
+Enthusiastic ;Surprised;6
+Excited ;Exhilarated ;43.5
+Excited ;Fearful ;9.5
+Excited ;Frustrated ;3
+Excited ;Grief-stricken;1
+Excited ;Happy;30.5
+Excited ;Horrified;7
+Excited ;Interested;18.5
+Excited ;Joyful;24
+Excited ;In Pain;2
+Excited ;Peaceful;0.5
+Excited ;Pleased;12
+Excited ;Proud;10.5
+Excited ;Relaxed;0.5
+Excited ;Relieved;2.5
+Excited ;Sad ;1.5
+Excited ;Satisfied ;5
+Excited ;Surprised;22.5
+Exhilarated ;Fearful ;0.5
+Exhilarated ;Frustrated ;0.5
+Exhilarated ;Grief-stricken;0
+Exhilarated ;Happy;29.5
+Exhilarated ;Horrified;1
+Exhilarated ;Interested;13
+Exhilarated ;Joyful;25
+Exhilarated ;In Pain;0
+Exhilarated ;Peaceful;2
+Exhilarated ;Pleased;12
+Exhilarated ;Proud;9.5
+Exhilarated ;Relaxed;2
+Exhilarated ;Relieved;3.5
+Exhilarated ;Sad ;0
+Exhilarated ;Satisfied ;9
+Exhilarated ;Surprised;8.5
+Fearful ;Frustrated ;12.5
+Fearful ;Grief-stricken;11
+Fearful ;Happy;0
+Fearful ;Horrified;36.5
+Fearful ;Interested;1.5
+Fearful ;Joyful;0.5
+Fearful ;In Pain;20
+Fearful ;Peaceful;0
+Fearful ;Pleased;0
+Fearful ;Proud;0
+Fearful ;Relaxed;0
+Fearful ;Relieved;0
+Fearful ;Sad ;10.5
+Fearful ;Satisfied ;0
+Fearful ;Surprised;8.5
+Frustrated ;Grief-stricken;12.5
+Frustrated ;Happy;0
+Frustrated ;Horrified;4.5
+Frustrated ;Interested;1.5
+Frustrated ;Joyful;0
+Frustrated ;In Pain;18
+Frustrated ;Peaceful;0
+Frustrated ;Pleased;0
+Frustrated ;Proud;0
+Frustrated ;Relaxed;0
+Frustrated ;Relieved;0
+Frustrated ;Sad ;28
+Frustrated ;Satisfied ;0
+Frustrated ;Surprised;1
+Grief-stricken;Happy;0
+Grief-stricken;Horrified;9
+Grief-stricken;Interested;0
+Grief-stricken;Joyful;0
+Grief-stricken;In Pain;21.5
+Grief-stricken;Peaceful;0
+Grief-stricken;Pleased;0
+Grief-stricken;Proud;0
+Grief-stricken;Relaxed;0
+Grief-stricken;Relieved;0
+Grief-stricken;Sad ;40.5
+Grief-stricken;Satisfied ;0
+Grief-stricken;Surprised;0
+Happy;Horrified;0
+Happy;Interested;15.5
+Happy;Joyful;52.5
+Happy;In Pain;0.5
+Happy;Peaceful;32
+Happy;Pleased;50
+Happy;Proud;32.5
+Happy;Relaxed;27.5
+Happy;Relieved;20.5
+Happy;Sad ;0
+Happy;Satisfied ;41
+Happy;Surprised;13
+Horrified;Interested;1
+Horrified;Joyful;0
+Horrified;In Pain;5.5
+Horrified;Peaceful;0
+Horrified;Pleased;0
+Horrified;Proud;0
+Horrified;Relaxed;0
+Horrified;Relieved;0
+Horrified;Sad ;8
+Horrified;Satisfied ;0
+Horrified;Surprised;12.5
+Interested;Joyful;7.5
+Interested;In Pain;0
+Interested;Peaceful;6
+Interested;Pleased;13
+Interested;Proud;6.5
+Interested;Relaxed;7.5
+Interested;Relieved;3
+Interested;Sad ;0.5
+Interested;Satisfied ;12.5
+Interested;Surprised;9
+Joyful;In Pain;0.5
+Joyful;Peaceful;14.5
+Joyful;Pleased;31
+Joyful;Proud;16.5
+Joyful;Relaxed;9.5
+Joyful;Relieved;7.5
+Joyful;Sad ;0
+Joyful;Satisfied ;18
+Joyful;Surprised;5.5
+In Pain;Peaceful;0
+In Pain;Pleased;0
+In Pain;Proud;0.5
+In Pain;Relaxed;0.5
+In Pain;Relieved;0
+In Pain;Sad ;28
+In Pain;Satisfied ;0
+In Pain;Surprised;1.5
+Peaceful;Pleased;31.5
+Peaceful;Proud;5
+Peaceful;Relaxed;54
+Peaceful;Relieved;19
+Peaceful;Sad ;0.5
+Peaceful;Satisfied ;40.5
+Peaceful;Surprised;1
+Pleased;Proud;32.5
+Pleased;Relaxed;22
+Pleased;Relieved;22.5
+Pleased;Sad ;0
+Pleased;Satisfied ;49
+Pleased;Surprised;4.5
+Proud;Relaxed;3.5
+Proud;Relieved;3
+Proud;Sad ;0
+Proud;Satisfied ;28.5
+Proud;Surprised;2
+Relaxed;Relieved;26.5
+Relaxed;Sad ;0.5
+Relaxed;Satisfied ;44
+Relaxed;Surprised;1
+Relieved;Sad ;0.5
+Relieved;Satisfied ;25
+Relieved;Surprised;1.5
+Sad ;Satisfied ;0
+Sad ;Surprised;0
+Satisfied ;Surprised;2
