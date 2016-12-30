@@ -85,12 +85,17 @@ inspect(fit.2, "rsquare") #Average Variance Extracted (AVE)
 
 ## AJUSTE DE UN MODELO GPCM (Generalized Partial Credit Model)
 
-# Modelo base
+# Analisis descriptivo
 
 if (!require("ltm")) {
   install.packages("ltm", repos="http://cran.rstudio.com/") 
   library("ltm")
 }
+
+descript(amd)
+rcor.test(amd, method = "kendall")
+
+# Modelo base
 
 fit1 <- grm(amd)
 fit1
