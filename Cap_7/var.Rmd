@@ -3,6 +3,8 @@ title: "Modelo de Vectores Autorregresivos"
 output: html_document
 ---
 
+### == AVISO: Debido al proceso de estimacion de los modelos, el codigo puede tardar en ejecutarse == 
+
 ### CARGA Y PREPARACION DE DATOS
 
 ```{r}
@@ -66,7 +68,7 @@ summary(coint)
 
 ```{r}
 
-# Modelo VEC, ya que las series est·n cointegradas
+# Modelo VEC, ya que las series est√°n cointegradas
 
 if (!require("tsDyn")) {
    install.packages("tsDyn", repos="http://cran.rstudio.com/") 
