@@ -14,5 +14,5 @@ Además, se ha optado por un planteamiento eminentemente práctico, en el que el
 - La disponibilidad de datos y código de programación en este repositorio (https://github.com/joaquinsanchez/LibroEP) 
 - Un enfoque novedoso y actual para la estimación de la eficacia publicitaria
 
-El libro está dirigido a alumnos de los Grados y Doctorados de Publicidad, de Marketing, de Administración y Dirección de Empresas y, además, es una herramienta práctica y valiosa para profesionales de agencias de publicidad, agencias de medios, departamentos de marketing, institutos de investigación de mercados, y empresas de análisis de datos.
+El libro está dirigido a alumnos de los Grados y Doctorados de Publicidad, de Marketing, de Administración y Dirección de Empresas y, además, puede ser una herramienta útil para profesionales de agencias de publicidad, agencias de medios, departamentos de marketing, institutos de investigación de mercados, y empresas de análisis de datos.
 
