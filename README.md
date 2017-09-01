@@ -1,6 +1,6 @@
 ## Eficacia Publicitaria: Teoría y Modelos Aplicados
 
-Material para la ejecución de los ejemplos desarrollados en el siguiente libro: Sánchez, J. (2017) _Eficacia Publicitaria: Teoría y Modelos Aplicados_. Ed. Pirámide. ISBN: 978-84-368-3779-7.
+Material para la ejecución de los ejemplos desarrollados en el siguiente libro: "Sánchez, J. (2017) _Eficacia Publicitaria: Teoría y Modelos Aplicados_. Ed. Pirámide. ISBN: 978-84-368-3779-7."
 
 Las instrucciones para **reproducir los resultados** de los ejemplos se encuentran en el ANEXO del manual. (NOTA: El código aparece sin acentos para evitar errores de lectura). Si se produce algún error en la ejecución del código, probablemente se deba a la actualización de algunos de los paquetes utilizados, o a la versión de R que se haya instalaldo. En la medida de lo posible, el código se mantendrá actualizado para evitar estos posible inconvenientes.
 
